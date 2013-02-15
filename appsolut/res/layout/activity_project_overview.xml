@@ -27,7 +27,13 @@
 	       android:textColor="@color/black"
 	       android:textSize="15sp"
 	       android:text="@string/project_name" />
-    
+	   
+	   <Button
+	       android:id="@+id/btn_midi_view"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:text="MIDI" />
+	       
     </LinearLayout>
     
 </ScrollView>

@@ -1,7 +1,11 @@
 package com.appsolut.composition;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ public class ProjectOverviewActivity extends SherlockActivity {
     // layout elements
     private TextView tv_project_name;
     private TextView tv_project_description;
+    private Button btn_midi_view;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +42,18 @@ public class ProjectOverviewActivity extends SherlockActivity {
         // import layout elements
         tv_project_name = (TextView) findViewById(R.id.tv_project_name);
         tv_project_description = (TextView) findViewById(R.id.tv_project_description);
+        btn_midi_view = (Button) findViewById(R.id.btn_midi_view);
         
         // set layout values
         tv_project_name.setText(projectModel.getName());
         tv_project_description.setText("Description lorem ipsum blah blah");
+        
+        // set listeners
+        btn_midi_view.setOnClickListener(new OnClickListener(){
+            public void onClick(View v) {
+                startActivity(new Intent(mContext,MIDIEditorActivity.class));
+            }
+        });
     }
     
     @Override
