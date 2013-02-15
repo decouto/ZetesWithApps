@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Butthurt</string>
-    <string name="hello_world">Hello world!</string>
+	
+    <!-- Appsolut Composition Globals -->
+    <string name="app_name">Appsolut Composition</string>
     <string name="menu_settings">Settings</string>
+    
+    <!-- 21W.789 Welcome Page -->
+    <string name="welcome_message">Hello 21W.789!</string>
+    <string name="welcome_btn">Click Me</string>
+    
+    <!-- Login/Register Splash -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email_label">Email</string>
+    <string name="email_hint">email@domain.com</string>
+    <string name="password_label">Password</string>
+    <string name="password_confirm_label">Password</string>
+    <string name="password_hint">password</string>
+    <string name="skip_login">Continue Without Account</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="recent_projects">Recent Projects</string>
+    <string name="view_all_projects">All Projects</string>
+    <string name="start_project">Start New Project</string>
+    <string name="no_projects">You haven\'t started any projects yet.</string>
+    <string name="view_project">&gt;</string>
+    
+    <!-- Project Overview -->
+    <string name="project_name">Project Name</string>
+    
+    <!-- MIDI Test -->
+    <string name="save_midi_btn">Save MIDI</string>
+    <string name="play_midi_btn">Play MIDI</string>
 
 </resources>

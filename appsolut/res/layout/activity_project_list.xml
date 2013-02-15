@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
+   
+    <TextView
+        android:id="@+id/tv_project_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:text="@string/view_all_projects" />
+    
+    <FrameLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView
+            android:id="@+id/tv_no_projects"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="@string/no_projects" />
+    
+	   <ListView
+	       android:id="@+id/lv_project_list"
+	       android:layout_width="match_parent"
+	       android:layout_height="wrap_content"
+	       android:visibility="gone" />
+    
+    </FrameLayout>
+    
+</LinearLayout>
+    

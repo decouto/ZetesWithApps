@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#EFEFEF" >
+    
+    <TextView
+        android:id="@+id/tv_midi_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="MIDI Test" />
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+        
+        <EditText
+	        android:id="@+id/et_midi_name"
+	        android:layout_width="120dp"
+	        android:layout_height="wrap_content"
+	        android:inputType="text"
+	        android:hint="filename" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        	android:textColor="#000000"
+	        android:textSize="15sp"
+            android:text=".midi" />
+        
+        <Button
+            android:id="@+id/btn_save_midi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="@string/save_midi_btn" />
+        
+    </LinearLayout>
+        
+    <Button
+        android:id="@+id/btn_play_midi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:enabled="false"
+        android:text="@string/play_midi_btn" />
+    
+</LinearLayout>

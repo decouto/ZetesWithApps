@@ -1,12 +1,13 @@
-package com.appsolut.butthurt.utils;
+package com.appsolut.composition.utils;
 
 import java.util.HashMap;
- 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.SparseArray;
  
 public class DatabaseHandler extends SQLiteOpenHelper {
  
@@ -35,14 +36,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
     // Creating Tables
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_COMPOSITIONS + "("
+        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_COMPOSITIONS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT, "
                 + KEY_DATE_CREATED + " TEXT, "
                 + KEY_LOC_RECORDING + " TEXT, "
                 + KEY_LOC_MIDI + " TEXT, "
                 + KEY_LOC_SHEET + " TEXT, "
-                + KEY_LOC_INFO + " TEXT, " + ")";
+                + KEY_LOC_INFO + " TEXT " + ");";
         db.execSQL(CREATE_LOGIN_TABLE);
     }
  
@@ -78,26 +79,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Getting composition data from database
      * */
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String,String> user = new HashMap<String,String>();
-        String selectQuery = "SELECT  * FROM " + TABLE_COMPOSITIONS;
+    public HashMap<String, String> getCompositionDetails(int project_id){
+        HashMap<String,String> project = new HashMap<String,String>();
+        String selectQuery = "SELECT  * FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_ID + " = '" + project_id +"';";
  
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
-            user.put("name", cursor.getString(1));
-            user.put("dateCreated", cursor.getString(2));
-            user.put("locRecording", cursor.getString(3));
-            user.put("locMIDI", cursor.getString(4));
-            user.put("locSheet", cursor.getString(5));
-            user.put("locInfo", cursor.getString(6));
+            project.put("name", cursor.getString(1));
+            project.put("dateCreated", cursor.getString(2));
+            project.put("locRecording", cursor.getString(3));
+            project.put("locMIDI", cursor.getString(4));
+            project.put("locSheet", cursor.getString(5));
+            project.put("locInfo", cursor.getString(6));
         }
         cursor.close();
         db.close();
         // return user
-        return user;
+        return project;
     }
  
     /**
@@ -114,6 +115,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
         // return row count
         return rowCount;
+    }
+    
+    public SparseArray<String> getCompositionNames() {
+        String nameQuery = "SELECT * FROM " + TABLE_COMPOSITIONS + " WHERE 1;";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(nameQuery, null);
+        SparseArray<String> result = new SparseArray<String>();
+        cursor.moveToFirst();
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            result.put(cursor.getInt(0), cursor.getString(1));
+        }
+        return result;
     }
  
     /**
