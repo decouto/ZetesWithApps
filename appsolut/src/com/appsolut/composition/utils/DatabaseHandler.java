@@ -7,7 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.SparseArray;
+import android.support.v4.util.LongSparseArray;
  
 public class DatabaseHandler extends SQLiteOpenHelper {
  
@@ -62,7 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Storing composition details in database
      * @param dateCreated String of form "mm/dd/yyyy"
      * */
-    public void addComposition(String name, String description, String dateCreated, String locRecording, String locMIDI, String locSheet, String locInfo) {
+    public long addComposition(String name, String description, String dateCreated, String locRecording, String locMIDI, String locSheet, String locInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
  
         ContentValues values = new ContentValues();
@@ -75,14 +75,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_LOC_INFO, locInfo);				// Info sheet location
  
         // Inserting Row
-        db.insert(TABLE_COMPOSITIONS, null, values);
+        long result = db.insert(TABLE_COMPOSITIONS, null, values);
         db.close(); // Closing database connection
+        
+        return result;
     }
  
     /**
      * Getting composition data from database
      * */
-    public HashMap<String, String> getCompositionDetails(int project_id){
+    public HashMap<String, String> getCompositionDetails(long project_id){
         HashMap<String,String> project = new HashMap<String,String>();
         String selectQuery = "SELECT  * FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_ID + " = '" + project_id +"';";
  
@@ -121,11 +123,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return rowCount;
     }
     
-    public SparseArray<String> getCompositionNames() {
+    public LongSparseArray<String> getCompositionNames() {
         String nameQuery = "SELECT * FROM " + TABLE_COMPOSITIONS + " WHERE 1;";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(nameQuery, null);
-        SparseArray<String> result = new SparseArray<String>();
+        LongSparseArray<String> result = new LongSparseArray<String>();
         cursor.moveToFirst();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             result.put(cursor.getInt(0), cursor.getString(1));

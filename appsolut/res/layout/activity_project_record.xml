@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_record_main"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+    android:fillViewport="true"
+	android:orientation="vertical">
+   
+   <TextView
+       android:id="@+id/tv_project_name"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:layout_gravity="center_horizontal"
+       android:textColor="@color/black"
+       android:textSize="30sp"
+       android:text="@string/project_name" />
+   
+   <View
+       android:id="@+id/view_metronome"
+       android:layout_width="80dp"
+       android:layout_height="40dp"
+       android:layout_gravity="center_horizontal"
+       android:layout_marginTop="30dp"
+       android:background="@color/black"
+       android:text="@string/record_audio" />
+    
+</LinearLayout>

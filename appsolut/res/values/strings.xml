@@ -2,7 +2,7 @@
 <resources>
 	
     <!-- Appsolut Composition Globals -->
-    <string name="app_name">Appsolut Composition</string>
+    <string name="app_name">SongScribe</string>
     <string name="menu_settings">Settings</string>
     
     <!-- 21W.789 Welcome Page -->
@@ -26,9 +26,13 @@
     <string name="start_project">Start New Project</string>
     <string name="no_projects">You haven\'t started any projects yet.</string>
     <string name="view_project">&gt;</string>
+    <string name="dialog_new_project">Enter a name for your project:</string>
+    <string name="dialog_new_project_hint">New Project Name</string>
     
     <!-- Project Overview -->
     <string name="project_name">Project Name</string>
+    <string name="record_audio">Record Audio</string>
+    <string name="view_midi">View MIDI</string>
     
     <!-- MIDI Test -->
     <string name="save_midi_btn">Save MIDI</string>

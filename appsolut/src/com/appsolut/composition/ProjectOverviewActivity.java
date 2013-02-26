@@ -3,6 +3,7 @@ package com.appsolut.composition;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,12 +19,13 @@ import com.appsolut.composition.utils.ProjectModel;
 public class ProjectOverviewActivity extends SherlockActivity {
     
     private Context mContext;
-    private int project_id;
+    private long project_id;
     private ProjectModel projectModel;
     
     // layout elements
     private TextView tv_project_name;
     private TextView tv_project_description;
+    private Button btn_record_audio;
     private Button btn_midi_view;
     
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,8 @@ public class ProjectOverviewActivity extends SherlockActivity {
         if (bundle == null) {
             finish();
         }
-        project_id = bundle.getInt("project_id");
+        project_id = bundle.getLong("project_id");
+        Log.d("project", "loaded: " + project_id);
         projectModel = new ProjectModel(mContext, project_id);
         setContentView(R.layout.activity_project_overview);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
@@ -44,6 +47,7 @@ public class ProjectOverviewActivity extends SherlockActivity {
         tv_project_name = (TextView) findViewById(R.id.tv_project_name);
         tv_project_description = (TextView) findViewById(R.id.tv_project_description);
         btn_midi_view = (Button) findViewById(R.id.btn_midi_view);
+        btn_record_audio = (Button) findViewById(R.id.btn_record_audio);
         
         // set layout values
         tv_project_name.setText(projectModel.getName());
@@ -52,7 +56,15 @@ public class ProjectOverviewActivity extends SherlockActivity {
         // set listeners
         btn_midi_view.setOnClickListener(new OnClickListener(){
             public void onClick(View v) {
-                startActivity(new Intent(mContext,MIDIEditorActivity.class));
+                startActivity(new Intent(mContext, MIDIEditorActivity.class));
+            }
+        });
+        
+        btn_record_audio.setOnClickListener(new OnClickListener(){
+            public void onClick(View v) {
+                Intent projectRecordIntent = new Intent(mContext, ProjectRecordAudioActivity.class);
+                projectRecordIntent.putExtra("project_id", project_id);
+                startActivity(projectRecordIntent);
             }
         });
     }
@@ -66,6 +78,7 @@ public class ProjectOverviewActivity extends SherlockActivity {
         SubMenu sub = menu.addSubMenu("Edit");
         sub.add("Edit Title");
         sub.add("Edit Description");
+        sub.add("Delete Project");
         return true;
     }
     
@@ -75,6 +88,15 @@ public class ProjectOverviewActivity extends SherlockActivity {
         if (title.equals("Share")) {
             // Launch Share/Export menu
             Toast.makeText(mContext, "Open share/export menu", Toast.LENGTH_LONG).show();
+            // TODO
+        }
+        else if (title.equals("Edit Title")) {
+            // TODO
+        }
+        else if (title.equals("Edit Description")) {
+            // TODO
+        }
+        else if (title.equals("Delete Project")) {
             // TODO
         }
         return true;

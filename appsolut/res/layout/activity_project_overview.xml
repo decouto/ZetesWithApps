@@ -29,10 +29,16 @@
 	       android:text="@string/project_name" />
 	   
 	   <Button
+	       android:id="@+id/btn_record_audio"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:text="@string/record_audio" />
+	   
+	   <Button
 	       android:id="@+id/btn_midi_view"
 	       android:layout_width="wrap_content"
 	       android:layout_height="wrap_content"
-	       android:text="MIDI" />
+	       android:text="@string/view_midi" />
 	       
     </LinearLayout>
     

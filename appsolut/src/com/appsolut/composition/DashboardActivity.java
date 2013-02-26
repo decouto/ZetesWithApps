@@ -1,9 +1,17 @@
 package com.appsolut.composition;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.SparseArray;
+import android.support.v4.util.LongSparseArray;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -11,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,12 +33,18 @@ public class DashboardActivity extends SherlockActivity {
     
     private Context mContext;
     private DatabaseHandler db;
-    private SparseArray<String> projects;
+    private LongSparseArray<String> projects;
     
     // layout elements
     private FrameLayout fl_recent_projects;
     private ListView lv_recent_projects;
     private Button btn_start_project;
+    
+    // dialog elements
+    private LayoutInflater dialogInflator;
+    private View newProjectDialogView;
+    private AlertDialog newProjectDialog;
+    private AlertDialog.Builder alertDialogBuilder;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,21 +59,60 @@ public class DashboardActivity extends SherlockActivity {
         fl_recent_projects = (FrameLayout) findViewById(R.id.fl_recent_projects);
         btn_start_project = (Button) findViewById(R.id.btn_start_project);
         
-        // populate Recent Projects
-        setUpListView();
-        
         // set listeners
         btn_start_project.setOnClickListener(new OnClickListener(){
             public void onClick(View v) {
-                Toast.makeText(mContext, "blank project added. Refresh dashboard", Toast.LENGTH_LONG).show();
-                int num = db.getRowCount() + 1;
-                db.addComposition("project" + num, "This is the n = " + num + "project to have been started", "05/16/1993", "uri", "uri", "uri", "uri");
-                // TODO
+                // get prompts.xml view
+                dialogInflator = LayoutInflater.from(mContext);
+                newProjectDialogView = dialogInflator.inflate(R.layout.dialog_new_project, null);
+                alertDialogBuilder = new AlertDialog.Builder(mContext);
+                // Set alertDialogBuilder view
+                alertDialogBuilder.setView(newProjectDialogView);
+                final EditText et_project_name = (EditText) newProjectDialogView.findViewById(R.id.et_new_project_name);
+                String projectName = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.US).format(new Date());
+                et_project_name.setHint(projectName);
+                et_project_name.setText(projectName);
+                // set dialog message
+                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Create new project
+                        String projectName = et_project_name.getText().toString();
+                        long projectID = db.addComposition(projectName, "", "", "", "", "", "");
+                        newProjectDialog.dismiss();
+                        if (projectID >= 0) {
+                            // creation succeeded
+                            Intent projectIntent = new Intent(mContext, ProjectOverviewActivity.class);
+                            projectIntent.putExtra("project_id", projectID);
+                            Log.d("project", "stored: " + projectID);
+                            startActivity(projectIntent);
+                        } else {
+                            // creation failed
+                            Toast.makeText(mContext, projectName+" could not be created", Toast.LENGTH_LONG).show();
+                        }
+                    }    
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        newProjectDialog.dismiss();
+                    }
+                });
+ 
+                // create alert dialog
+                newProjectDialog = alertDialogBuilder.create();
+                newProjectDialog.show();
             }
         });
     }
     
-    private void setUpListView() {
+    public void onResume() {
+        super.onResume();
+        
+        // populate Recent Projects
+        setupListView();
+    }
+    
+    private void setupListView() {
         int rows = db.getRowCount();
         final boolean rowOverflow = rows > 5;
         int rowsToShow = Math.min(5, rows);
@@ -82,7 +136,7 @@ public class DashboardActivity extends SherlockActivity {
                         startActivity(new Intent(mContext, ProjectListActivity.class));
                     }
                     else {
-                        int project_id = projects.keyAt(arg2);
+                        long project_id = projects.keyAt(arg2);
                         Intent projectIntent = new Intent(mContext, ProjectOverviewActivity.class);
                         projectIntent.putExtra("project_id", project_id);
                         startActivity(projectIntent);

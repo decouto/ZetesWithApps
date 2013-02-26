@@ -2,14 +2,14 @@ package com.appsolut.composition;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.SparseArray;
+import android.support.v4.util.LongSparseArray;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.appsolut.composition.utils.DatabaseHandler;
@@ -18,7 +18,7 @@ public class ProjectListActivity extends SherlockActivity {
     
     private Context mContext;
     private DatabaseHandler db;
-    private SparseArray<String> projects;
+    private LongSparseArray<String> projects;
     
     // layout elements
     private TextView tv_no_projects;
