@@ -2,6 +2,7 @@ package com.appsolut.composition;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,12 +23,14 @@ public class MainActivity extends SherlockActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+        
         tv_welcome_message = (TextView) findViewById(R.id.tv_welcome_message);
         btn_welcome = (Button) findViewById(R.id.btn_welcome);
         btn_welcome.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                tv_welcome_message.setText("Goodbye!");
+                tv_welcome_message.setText("Goodbye 21w.789!");
             }
         });
     }

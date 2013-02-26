@@ -52,7 +52,7 @@ public class DashboardActivity extends SherlockActivity {
             public void onClick(View v) {
                 Toast.makeText(mContext, "blank project added. Refresh dashboard", Toast.LENGTH_LONG).show();
                 int num = db.getRowCount() + 1;
-                db.addComposition("project" + num, "05/16/1993", "uri", "uri", "uri", "uri");
+                db.addComposition("project" + num, "This is the n = " + num + "project to have been started", "05/16/1993", "uri", "uri", "uri", "uri");
                 // TODO
             }
         });
@@ -107,8 +107,7 @@ public class DashboardActivity extends SherlockActivity {
         String title = item.getTitle().toString();
         if (title.equals("Settings")) {
             // Launch Settings activity
-            Toast.makeText(mContext, "Open settings activity", Toast.LENGTH_LONG).show();
-            // TODO
+            startActivity(new Intent(mContext, SettingsActivity.class));
         }
         return true;
     }

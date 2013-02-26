@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <PreferenceCategory
+        android:title="General Settings">
+        
+        <CheckBoxPreference
+            android:title="Title"
+            android:summary="Summary"
+            android:key="prefPredictKey" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:title="MIDI Generation Preferences" >
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:title="MIDI Editor Preferences" >
+    </PreferenceCategory>
+    
+</PreferenceScreen>

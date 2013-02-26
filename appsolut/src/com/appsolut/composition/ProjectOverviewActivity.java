@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.appsolut.composition.utils.ProjectModel;
 
 public class ProjectOverviewActivity extends SherlockActivity {
@@ -46,7 +47,7 @@ public class ProjectOverviewActivity extends SherlockActivity {
         
         // set layout values
         tv_project_name.setText(projectModel.getName());
-        tv_project_description.setText("Description lorem ipsum blah blah");
+        tv_project_description.setText(projectModel.getDescription());
         
         // set listeners
         btn_midi_view.setOnClickListener(new OnClickListener(){
@@ -61,6 +62,10 @@ public class ProjectOverviewActivity extends SherlockActivity {
         // Skip landing page item
         menu.add("Share");
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        
+        SubMenu sub = menu.addSubMenu("Edit");
+        sub.add("Edit Title");
+        sub.add("Edit Description");
         return true;
     }
     

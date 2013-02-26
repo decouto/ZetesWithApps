@@ -13,10 +13,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
  
     // Database Name
-    private static final String DATABASE_NAME = "butthurt";
+    private static final String DATABASE_NAME = "appsolut";
  
     // Composition table name
     private static final String TABLE_COMPOSITIONS = "compositions";
@@ -24,6 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Composition Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
+    private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_DATE_CREATED = "dateCreated";
     private static final String KEY_LOC_RECORDING = "locRecording";
     private static final String KEY_LOC_MIDI = "locMIDI";
@@ -39,6 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_COMPOSITIONS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT, "
+                + KEY_DESCRIPTION + " TEXT, "
                 + KEY_DATE_CREATED + " TEXT, "
                 + KEY_LOC_RECORDING + " TEXT, "
                 + KEY_LOC_MIDI + " TEXT, "
@@ -60,11 +62,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Storing composition details in database
      * @param dateCreated String of form "mm/dd/yyyy"
      * */
-    public void addComposition(String name, String dateCreated, String locRecording, String locMIDI, String locSheet, String locInfo) {
+    public void addComposition(String name, String description, String dateCreated, String locRecording, String locMIDI, String locSheet, String locInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
  
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);                     // Name
+        values.put(KEY_DESCRIPTION, description);       // Description
         values.put(KEY_DATE_CREATED, dateCreated);      // Date created
         values.put(KEY_LOC_RECORDING, locRecording);    // Recording location
         values.put(KEY_LOC_MIDI, locMIDI);              // MIDI file location
@@ -89,11 +92,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
             project.put("name", cursor.getString(1));
-            project.put("dateCreated", cursor.getString(2));
-            project.put("locRecording", cursor.getString(3));
-            project.put("locMIDI", cursor.getString(4));
-            project.put("locSheet", cursor.getString(5));
-            project.put("locInfo", cursor.getString(6));
+            project.put("description", cursor.getString(2));
+            project.put("dateCreated", cursor.getString(3));
+            project.put("locRecording", cursor.getString(4));
+            project.put("locMIDI", cursor.getString(5));
+            project.put("locSheet", cursor.getString(6));
+            project.put("locInfo", cursor.getString(7));
         }
         cursor.close();
         db.close();

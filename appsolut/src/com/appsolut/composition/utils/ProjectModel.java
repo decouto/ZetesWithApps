@@ -23,10 +23,15 @@ public class ProjectModel {
     private void updateDetails() {
         projectDetails = db.getCompositionDetails(project_id);
         project_name = projectDetails.get("name");
+        project_description = projectDetails.get("description");
     }
     
     public String getName() {
         return project_name;
+    }
+    
+    public String getDescription() {
+        return project_description;
     }
 
 }

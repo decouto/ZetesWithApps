@@ -44,18 +44,18 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="20dip"
 		    android:layout_alignParentBottom="true"
+          android:layout_below="@+id/ll_login_form"
 		    android:background="#FEFEFE" >
 		</LinearLayout>
         <!-- Footer Ends -->
  
         <!-- Login Form -->
         <LinearLayout
-          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/ll_login_form"
           android:orientation="vertical"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
           android:layout_below="@id/ll_header"
-          android:layout_above="@id/ll_footer"
           android:padding="10dip" >
           <!--  Email Label -->
           <TextView android:layout_width="fill_parent"
@@ -115,17 +115,18 @@
                 android:textColor="#000000"/>
 			-->
           
-          <!-- Link to Registration Screen -->
+          <!-- Link to Skip Login -->
           <TextView android:id="@+id/tv_skip_login"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dip"
                 android:layout_marginBottom="40dip"
+                android:visibility="visible"
                 android:text="@string/skip_login"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="20sp"
-                android:textColor="#000000"/>
+                android:textColor="@color/black"/>
  
         </LinearLayout>
         <!-- Login Form Ends -->

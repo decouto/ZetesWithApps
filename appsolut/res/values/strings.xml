@@ -6,7 +6,7 @@
     <string name="menu_settings">Settings</string>
     
     <!-- 21W.789 Welcome Page -->
-    <string name="welcome_message">Hello 21W.789!</string>
+    <string name="welcome_message">Hello 21w.789!</string>
     <string name="welcome_btn">Click Me</string>
     
     <!-- Login/Register Splash -->
