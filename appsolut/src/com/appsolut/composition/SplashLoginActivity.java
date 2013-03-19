@@ -41,7 +41,7 @@ public class SplashLoginActivity extends SherlockActivity {
         tv_skip_login.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent dashboardIntent = new Intent(mContext, DashboardActivity.class);
+                Intent dashboardIntent = new Intent(mContext, MainActivity.class);
                 dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(dashboardIntent);
                 finish();

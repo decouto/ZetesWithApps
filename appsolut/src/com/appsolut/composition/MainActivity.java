@@ -1,59 +1,60 @@
 package com.appsolut.composition;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 public class MainActivity extends SherlockActivity {
     
-    private TextView tv_welcome_message;
-    private Button btn_welcome;
+    private Context mContext;
+    
+    private Button btn_new_project;
+    private Button btn_project_list;
+    private Button btn_social;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        
+        getSupportActionBar().hide();
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+        mContext = this;
         
-        tv_welcome_message = (TextView) findViewById(R.id.tv_welcome_message);
-        btn_welcome = (Button) findViewById(R.id.btn_welcome);
-        btn_welcome.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                tv_welcome_message.setText("Goodbye 21w.789!");
+        // Import layout elements
+        btn_new_project = (Button) findViewById(R.id.btn_new_project);
+        btn_project_list = (Button) findViewById(R.id.btn_project_list);
+        btn_social = (Button) findViewById(R.id.btn_social);
+        
+        // Set listeners
+        btn_new_project.setOnClickListener(new OnClickListener() {
+            public void onClick(View v){
+                Intent newProjectIntent = new Intent(mContext, ProjectNewActivity.class);
+                newProjectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(newProjectIntent);
             }
         });
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Skip landing page item
-        menu.add("Continue");
-        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String title = item.getTitle().toString();
-        if (title.equals("Continue")) {
-            // Launch Login Splash activity
-            Intent loginIntent = new Intent(getApplicationContext(), SplashLoginActivity.class);
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(loginIntent);
-            finish();
-        }
-        return true;
+        btn_project_list.setOnClickListener(new OnClickListener() {
+            public void onClick(View v){
+                Intent projectListIntent = new Intent(mContext, ProjectListActivity.class);
+                projectListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(projectListIntent);
+            }
+        });
+        btn_social.setOnClickListener(new OnClickListener() {
+            public void onClick(View v){
+                //Intent socialIntent = new Intent(mContext, SocialActivity.class);
+                //socialIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //startActivity(socialIntent);
+                Toast.makeText(mContext, "Social - coming soon", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

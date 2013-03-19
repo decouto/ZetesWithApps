@@ -22,22 +22,28 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light" >
         
-        <!-- 21W.789 Landing Page -->
-        <activity
-            android:name="com.appsolut.composition.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        
         <!-- Login Splash Activity -->
         <activity
             android:name="com.appsolut.composition.SplashLoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
   			android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Main Activity -->
+        <activity
+            android:name="com.appsolut.composition.MainActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <!-- New Project Activity -->
+        <activity
+            android:name="com.appsolut.composition.ProjectNewActivity"
+            android:label="@string/app_name" >
         </activity>
         
         <!-- Dashboard Activity -->

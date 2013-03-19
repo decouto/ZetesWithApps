@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -142,6 +143,33 @@ public class DashboardActivity extends SherlockActivity {
                         startActivity(projectIntent);
                     }
                 } 
+            });
+            lv_recent_projects.setOnItemLongClickListener(new OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (arg2 == 4 && rowOverflow) {
+                        startActivity(new Intent(mContext, ProjectListActivity.class));
+                    }
+                    else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle("Confirm delete project")
+                            .setMessage("Are you sure you want to delete this project?")
+                            .setCancelable(false)
+                            .setIcon(R.drawable.ic_launcher)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Toast.makeText(mContext, "Prject Deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                        builder.create().show(); 
+                    }
+                    return true;
+                }
             });
             fl_recent_projects.removeAllViews();
             fl_recent_projects.addView(lv_recent_projects, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));

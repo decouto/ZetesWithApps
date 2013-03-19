@@ -2,7 +2,7 @@
 <resources>
 	
     <!-- Appsolut Composition Globals -->
-    <string name="app_name">SongScribe</string>
+    <string name="app_name">Song Scribe</string>
     <string name="menu_settings">Settings</string>
     
     <!-- 21W.789 Welcome Page -->
