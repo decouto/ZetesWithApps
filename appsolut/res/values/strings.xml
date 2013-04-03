@@ -37,5 +37,16 @@
     <!-- MIDI Test -->
     <string name="save_midi_btn">Save MIDI</string>
     <string name="play_midi_btn">Play MIDI</string>
+    
+    <!-- Location -->
+    <string name="gpx_header">
+		&gt;?xml version="1.0"?&lt;
+		&gt;gpx
+ 			version="1.0"
+ 			creator="ExpertGPS 1.1 - http://www.topografix.com"
+ 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 			xmlns="http://www.topografix.com/GPX/1/0"
+ 			xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"&lt;
+    </string>
 
 </resources>

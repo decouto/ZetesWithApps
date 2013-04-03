@@ -1,0 +1,7 @@
+Ec_WiFi_1
+998
+90
+41
+35
+50
+Total rate: 628kb/s in time 1

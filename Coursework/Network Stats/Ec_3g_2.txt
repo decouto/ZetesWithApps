@@ -1,0 +1,11 @@
+Ec_3g_2
+1145
+412
+318
+400
+379
+Period 0, rate: 34
+Period 1, rate: 17
+Period 2, rate: 24
+Period 3, rate: 50
+Total rate: 32kb/s in time 20

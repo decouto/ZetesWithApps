@@ -52,6 +52,10 @@ public class MainActivity extends SherlockActivity {
                 //Intent socialIntent = new Intent(mContext, SocialActivity.class);
                 //socialIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //startActivity(socialIntent);
+                
+                Intent socialIntent = new Intent(mContext, LocationActivity.class);
+                socialIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(socialIntent);
                 Toast.makeText(mContext, "Social - coming soon", Toast.LENGTH_SHORT).show();
             }
         });

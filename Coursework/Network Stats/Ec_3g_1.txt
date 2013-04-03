@@ -1,0 +1,12 @@
+Ec_3g_1
+1043
+530
+407
+578
+536
+Period 0, rate: 26
+Period 1, rate: 27
+Period 2, rate: 18
+Period 3, rate: 23
+Period 4, rate: 24
+Total rate: 23kb/s in time 27

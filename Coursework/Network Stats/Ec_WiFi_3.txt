@@ -1,0 +1,7 @@
+Ec_WiFi_3
+35
+56
+376
+73
+32
+Total rate: 712kb/s in time 0

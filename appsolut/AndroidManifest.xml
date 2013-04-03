@@ -10,6 +10,8 @@
     
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     
@@ -44,6 +46,13 @@
         <activity
             android:name="com.appsolut.composition.ProjectNewActivity"
             android:label="@string/app_name" >
+        </activity>
+        
+        <!-- Location Activity -->
+        <activity
+            android:name="com.appsolut.composition.LocationActivity"
+            android:label="@string/app_name"
+  			android:screenOrientation="portrait" >
         </activity>
         
         <!-- Dashboard Activity -->

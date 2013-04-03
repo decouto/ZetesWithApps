@@ -1,0 +1,7 @@
+Ec_WiFi_2
+704
+33
+152
+30
+79
+Total rate: 802kb/s in time 0

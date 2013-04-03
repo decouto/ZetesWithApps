@@ -1,0 +1,9 @@
+Ec_3g_3
+490
+424
+338
+348
+345
+Period 0, rate: 69
+Period 1, rate: 33
+Total rate: 52kb/s in time 12
