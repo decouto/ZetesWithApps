@@ -4,18 +4,159 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" >
     
+    <!-- Title -->
     <TextView android:id="@+id/tv_new_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:text="New Project" />
+        android:layout_marginTop="10dip"
+        android:textSize="30sp"
+        android:text="@string/new_project" />
     
-    <LinearLayout android:id="@+id/ll_new_project_buttons"
+    <!-- Project Name -->
+    <TextView android:id="@+id/tv_project_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_new_project"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
+        android:text="@string/new_project_name" />
+    
+    <EditText android:id="@+id/et_project_name"
+        android:layout_width="180dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_new_project"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginLeft="10dip"
+        android:gravity="center"
+        android:hint="@string/new_project_name" />
+    
+    <!-- Project BPM -->
+    <TextView android:id="@+id/tv_project_bpm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_project_name"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
+        android:text="@string/new_project_bpm" />
+    
+    <EditText android:id="@+id/et_project_bpm"
+        android:layout_width="180dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_project_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginLeft="10dip"
+        android:gravity="center"
+        android:inputType="number"
+        android:hint="@string/new_project_bpm" />
+    
+    <!-- Project Description -->
+    <TextView android:id="@+id/tv_project_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_project_bpm"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
+        android:text="@string/new_project_description" />
+    
+    <EditText android:id="@+id/et_project_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_alignParentBottom="true" >
+        android:layout_below="@+id/tv_project_description"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dip"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:singleLine="false"
+        android:lines="3"
+        android:gravity="top"
+        android:hint="@string/new_project_description" />
+    
+    <!-- Project Audio -->
+    <TextView android:id="@+id/tv_project_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_project_description"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
+        android:text="@string/new_project_audio" />
+    
+	    <!-- Recording Controls -->
+		<TextView android:id="@+id/tv_record_audio"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/tv_project_audio"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="16sp"
+	        android:text="@string/record_audio" />
+		
+		<FrameLayout android:id="@+id/fl_record_btn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/tv_project_audio"
+		    android:layout_alignParentRight="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginRight="10dp" />
+		
+		<!-- Playback Controls -->
+		<TextView android:id="@+id/tv_playback_audio"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/fl_record_btn"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="16sp"
+	        android:text="@string/playback_audio" />
+		
+		<FrameLayout android:id="@+id/fl_playback_btn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/fl_record_btn"
+		    android:layout_alignParentRight="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginRight="10dp" />
+    
+    <!-- Menu -->
+    <LinearLayout android:id="@+id/ll_new_project_menu"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="0dp"
+        android:padding="0dp">
+        
+        <!-- Cancel Button -->
+        <Button android:id="@+id/btn_cancel"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:text="@string/btn_cancel" />
+        
+        <!-- Save Button -->
+        <Button android:id="@+id/btn_save_project"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:text="@string/btn_save" />
         
     </LinearLayout>
     

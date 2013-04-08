@@ -39,13 +39,15 @@
         <!-- Main Activity -->
         <activity
             android:name="com.appsolut.composition.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+  			android:screenOrientation="portrait" >
         </activity>
         
         <!-- New Project Activity -->
         <activity
             android:name="com.appsolut.composition.ProjectNewActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+  			android:screenOrientation="portrait" >
         </activity>
         
         <!-- Location Activity -->
@@ -88,6 +90,13 @@
             android:name="com.appsolut.composition.ProjectRecordAudioActivity"
             android:label="@string/app_name"
   			android:screenOrientation="portrait" >
+        </activity>
+        
+        <!-- Social Activity -->
+        <activity
+            android:name="com.appsolut.composition.SocialActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         
         <!-- MIDI Editor Activity -->

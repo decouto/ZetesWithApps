@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
@@ -16,6 +15,7 @@ public class MainActivity extends SherlockActivity {
     private Context mContext;
     
     private Button btn_new_project;
+    private Button btn_settings;
     private Button btn_project_list;
     private Button btn_social;
     
@@ -29,6 +29,7 @@ public class MainActivity extends SherlockActivity {
         
         // Import layout elements
         btn_new_project = (Button) findViewById(R.id.btn_new_project);
+        btn_settings = (Button) findViewById(R.id.btn_settings);
         btn_project_list = (Button) findViewById(R.id.btn_project_list);
         btn_social = (Button) findViewById(R.id.btn_social);
         
@@ -40,6 +41,13 @@ public class MainActivity extends SherlockActivity {
                 startActivity(newProjectIntent);
             }
         });
+        btn_settings.setOnClickListener(new OnClickListener() {
+            public void onClick(View v){
+                Intent settingsIntent = new Intent(mContext, SettingsActivity.class);
+                settingsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(settingsIntent);
+            }
+        });
         btn_project_list.setOnClickListener(new OnClickListener() {
             public void onClick(View v){
                 Intent projectListIntent = new Intent(mContext, ProjectListActivity.class);
@@ -49,14 +57,9 @@ public class MainActivity extends SherlockActivity {
         });
         btn_social.setOnClickListener(new OnClickListener() {
             public void onClick(View v){
-                //Intent socialIntent = new Intent(mContext, SocialActivity.class);
-                //socialIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //startActivity(socialIntent);
-                
-                Intent socialIntent = new Intent(mContext, LocationActivity.class);
+                Intent socialIntent = new Intent(mContext, SocialActivity.class);
                 socialIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(socialIntent);
-                Toast.makeText(mContext, "Social - coming soon", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -3,10 +3,28 @@
     <PreferenceCategory
         android:title="General Settings">
         
+        <EditTextPreference
+            android:title="Default BPM"
+            android:summary="Default beats-per-minute for new recording"
+            android:inputType="number"
+            android:defaultValue="120"
+            android:key="prefDefaultBPM" />
+        
         <CheckBoxPreference
             android:title="Title"
             android:summary="Summary"
             android:key="prefPredictKey" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory 
+        android:title="Account Settings">
+        
+        <CheckBoxPreference
+            android:title="Remember my login choice"
+            android:summary="Remember user details if logged in or preference to use without account"
+            android:defaultValue="false"
+            android:key="prefAccountRememberDetails" />
         
     </PreferenceCategory>
     

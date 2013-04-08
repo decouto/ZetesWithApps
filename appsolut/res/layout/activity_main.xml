@@ -32,13 +32,21 @@
         android:padding="0dp"
         android:layout_alignParentBottom="true">
         
+        <Button android:id="@+id/btn_settings"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:text="@string/btn_settings" />
+        
         <Button android:id="@+id/btn_social"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:layout_weight="1"
             android:layout_margin="0dp"
             android:padding="0dp"
-            android:text="SOCIAL" />
+            android:text="@string/btn_social" />
         
         <Button android:id="@+id/btn_project_list"
             android:layout_height="fill_parent"
@@ -46,7 +54,7 @@
             android:layout_weight="1"
             android:layout_margin="0dp"
             android:padding="0dp"
-            android:text="PROJECTS" />
+            android:text="@string/btn_projects" />
         
     </LinearLayout>
     

@@ -1,6 +1,7 @@
 package com.appsolut.composition;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.LongSparseArray;
 import android.view.View;
@@ -27,8 +28,7 @@ public class ProjectListActivity extends SherlockActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_list);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setSubtitle("Projects");
+        getSupportActionBar().hide();
         
         mContext = this;
         db = new DatabaseHandler(mContext);
@@ -50,7 +50,9 @@ public class ProjectListActivity extends SherlockActivity {
                 public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                     String item = String.valueOf(projects.keyAt(arg2));
                     Toast.makeText(mContext, "ProjectID " + item + " selected", Toast.LENGTH_SHORT).show();
-                    // TODO
+                    Intent projectIntent = new Intent(mContext, ProjectOverviewActivity.class);
+                    projectIntent.putExtra("project_id", projects.keyAt(arg2));
+                    startActivity(projectIntent);
                 } 
             });
             tv_no_projects.setVisibility(View.GONE);

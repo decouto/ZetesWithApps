@@ -119,14 +119,20 @@
           <TextView android:id="@+id/tv_skip_login"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dip"
-                android:layout_marginBottom="40dip"
+                android:layout_marginTop="10dip"
+                android:layout_marginBottom="5dip"
+                android:padding="10dp"
                 android:visibility="visible"
                 android:text="@string/skip_login"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
+          
+          <CheckBox android:id="@+id/cb_remember_login"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/remember_login"/>
  
         </LinearLayout>
         <!-- Login Form Ends -->
