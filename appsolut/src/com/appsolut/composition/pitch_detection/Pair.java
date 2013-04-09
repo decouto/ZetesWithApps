@@ -13,7 +13,7 @@ public class Pair<L,R> {
 		if(that == null || !(that instanceof Pair)){
 			return false;
 		}
-		Pair pThat = (Pair) that;
+		Pair<?, ?> pThat = (Pair<?, ?>) that;
 		return this.left.equals(pThat.left) && this.right.equals(pThat.right);
 	}
 }

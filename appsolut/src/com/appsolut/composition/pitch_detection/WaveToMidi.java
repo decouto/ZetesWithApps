@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.lang.StringBuilder;
 import org.jfugue.Player;
 
-public class WaveToMidi implements WaveAnalyzer {
+public class WaveToMidi {
 	private final static double[] FREQS_MIDI_OCT_0 = {	261.6255653006,
 																277.1826309769,
 																293.6647679174,
@@ -20,8 +20,6 @@ public class WaveToMidi implements WaveAnalyzer {
 																493.8833012561};
 	private final static int DEFAULT_CLIP_RATE = 5;
 	
-	
-	@Override
 	public File audioToMidiFile(double[] audio, long sampleRate) {
 		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
 	}
