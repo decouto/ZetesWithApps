@@ -19,8 +19,9 @@ public class PlotTones {
 	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
 		int numClips = (int) (clipRate*lenAudioInSecs);
-		
-		int[] inpFreqs = audioToAllFreqs(audio,sampleRate,(int) (sampleRate/10),8);
+		int WINDOW_SIZE = 4096;
+		int SLIDE = 2048;
+		int[] inpFreqs = audioToAllFreqs(audio,sampleRate,WINDOW_SIZE,SLIDE);
 		return aveFreqs(inpFreqs, numClips);
 	}
 	
