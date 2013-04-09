@@ -1,0 +1,114 @@
+##############################
+******************************
+Window Size: 8192
+Slide: 8192
+Max Difference: 4
+Ave Difference: 3.0
+******************************
+Window Size: 8192
+Slide: 4096
+Max Difference: 4
+Ave Difference: 2.0
+******************************
+Window Size: 8192
+Slide: 2048
+Max Difference: 4
+Ave Difference: 2.0
+******************************
+Window Size: 8192
+Slide: 1024
+Max Difference: 4
+Ave Difference: 2.0
+******************************
+Window Size: 8192
+Slide: 512
+Max Difference: 4
+Ave Difference: 2.0
+******************************
+Window Size: 8192
+Slide: 256
+Max Difference: 4
+Ave Difference: 2.0
+******************************
+Window Size: 8192
+Slide: 128
+Max Difference: 4
+Ave Difference: 2.0
+##############################
+******************************
+Window Size: 4096
+Slide: 4096
+Max Difference: 12
+Ave Difference: 7.0
+******************************
+Window Size: 4096
+Slide: 2048
+Max Difference: 12
+Ave Difference: 6.0
+******************************
+Window Size: 4096
+Slide: 1024
+Max Difference: 12
+Ave Difference: 6.0
+******************************
+Window Size: 4096
+Slide: 512
+Max Difference: 12
+Ave Difference: 6.0
+******************************
+Window Size: 4096
+Slide: 256
+Max Difference: 12
+Ave Difference: 6.0
+******************************
+Window Size: 4096
+Slide: 128
+Max Difference: 12
+Ave Difference: 6.0
+##############################
+******************************
+Window Size: 2048
+Slide: 2048
+Max Difference: 28
+Ave Difference: 12.0
+******************************
+Window Size: 2048
+Slide: 1024
+Max Difference: 28
+Ave Difference: 13.0
+******************************
+Window Size: 2048
+Slide: 512
+Max Difference: 28
+Ave Difference: 14.0
+******************************
+Window Size: 2048
+Slide: 256
+Max Difference: 28
+Ave Difference: 14.0
+******************************
+Window Size: 2048
+Slide: 128
+Max Difference: 28
+Ave Difference: 14.0
+##############################
+******************************
+Window Size: 1024
+Slide: 1024
+Max Difference: 39
+Ave Difference: 22.0
+******************************
+Window Size: 1024
+Slide: 512
+Max Difference: 39
+Ave Difference: 21.0
+******************************
+Window Size: 1024
+Slide: 256
+Max Difference: 39
+Ave Difference: 21.0
+******************************
+Window Size: 1024
+Slide: 128
+Max Difference: 39
+Ave Difference: 21.0

@@ -9,13 +9,14 @@ import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
 public class PlotTones {
 	/**
-	 * Takes audio and finds the most prominent frequency for each part
+	 * Takes audio and finds the most prominent frequency for each part.
+	 * 
 	 * @param audio
 	 * @param sampleRate
-	 * @param clipRate
+	 * @param clipRate | The number of frequencies to produce per second
 	 * @return
 	 */
-	static int[] audioToFreqs(final double[] audio,final long sampleRate,int clipRate){
+	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
 		int numClips = (int) (clipRate*lenAudioInSecs);
 		
@@ -23,20 +24,67 @@ public class PlotTones {
 		return aveFreqs(inpFreqs, numClips);
 	}
 	
-	static int[] audioToAllFreqs(final double[] audio,final long sampleRate, int windowSize, int slide){
+	/**
+	 * Calculates the frequency for a large number of points using a window 
+	 * 
+	 * @param audio
+	 * @param sampleRate 
+	 * @param windowSize 
+	 * @param slide | The amount the window is moved over every iteration
+	 * @return
+	 */
+	static int[] audioToAllFreqs(double[] audio,long sampleRate, int windowSize, int slide){
 		int numWindows = audio.length/slide; 
 		int[] inpFreqs = new int[numWindows];
 		double[] windowedAudio = new double[windowSize];
 		//Iterating along the input Audio calculate the prominent frequency in a window centered on every sample
 		//Move the window over slide units every time
+//		System.out.println("######################################");
+//		System.out.print("audio:  ");
+//		for(int i=0; i<10;i++){
+//			System.out.print(audio[i*4400]);
+//			System.out.print(",  ");
+//		}
+//		System.out.println(";");
 		for(int i=0; i<numWindows; i++){
 			window(windowedAudio,audio,i*slide + windowSize/2);
+//			System.out.println("*************************************");
+//			System.out.print("center:  ");
+//			System.out.println(i*slide + windowSize/2);
+//			System.out.print("audio.length:  ");
+//			System.out.println(audio.length);
+//			System.out.print("audio:  ");
+//			for(int j=0; j<10;j++){
+//				System.out.print(audio[j*4400]);
+//				System.out.print(",  ");
+//			}
+//			System.out.println(";");
+//			System.out.print("audio in window:  ");
+//			System.out.print(audio[i*slide+3]);
+//			System.out.print(",  ");
+//			System.out.print(audio[i*slide + windowSize/2]);
+//			System.out.print(",  ");
+//			System.out.print(audio[i*slide + windowSize - 3]);
+//			System.out.println(";");
+//			System.out.print("windowedAudio:  ");
+//			System.out.print(windowedAudio[3]);
+//			System.out.print(",  ");
+//			System.out.print(windowedAudio[windowedAudio.length/2]);
+//			System.out.print(",  ");
+//			System.out.print(windowedAudio[windowedAudio.length -3]);
+//			System.out.println(";");
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
-			System.out.println(inpFreqs[i]);
+//			System.out.println(inpFreqs[i]);
 		}
 		return inpFreqs;
 	}
-	
+	/**
+	 * takes inpFreqs and averages it into an array of size numClips
+	 * 
+	 * @param inpFreqs
+	 * @param numClips
+	 * @return
+	 */
 	static int[] aveFreqs(int[] inpFreqs, int numClips){
 		int lenClipInSamples = inpFreqs.length/numClips;
 		//Average the values in inpFreqs to get the correct number of Pitches
@@ -56,6 +104,7 @@ public class PlotTones {
 	 * Modifies an array in place to give the Hann function of the input data centered on the prescribed index
 	 * 
 	 * Formula for Hann: w(i) = .5 * (1 - Math.cos(2*Math.PI*i/(width-1)))
+	 * 
 	 * @param inp
 	 * @param center
 	 * @param width
@@ -64,6 +113,10 @@ public class PlotTones {
 	static void window(double[] out, double[] inp, int center){
 		int width = out.length;
 		int stInd = center - width/2;
+		int stopInd = center + width/2;
+		if(stopInd >= inp.length){
+			stInd = inp.length - 1 - width;
+		}
 		for(int i=0;i<width;i++){
 			if(stInd+i<0 || stInd+i >= inp.length){
 				out[i] = 0;
@@ -74,7 +127,7 @@ public class PlotTones {
 		}
 	}
 	
-	static int[] getProminentFrequencies(final double[] inputWaveform, final long sampleRate, final int numTones, final double[] noiseFreqs){
+	static int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
 		int numberBins = (int) Math.round(Math.pow(2,13));
 		if(numberBins > inputWaveform.length) numberBins = inputWaveform.length;
 		double [] working_wave = getNormalArray(inputWaveform);//normalize the working wave by subtracting its average value from every element

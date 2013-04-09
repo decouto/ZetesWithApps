@@ -20,6 +20,7 @@ public class WaveToMidi implements WaveAnalyzer {
 																493.8833012561};
 	private final static int DEFAULT_CLIP_RATE = 5;
 	
+	
 	@Override
 	public File audioToMidiFile(double[] audio, long sampleRate) {
 		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
@@ -42,38 +43,51 @@ public class WaveToMidi implements WaveAnalyzer {
 	}
 	public String audioToJFugueMusicString(double[] audio, long sampleRate, int clipRate) {
 		int[] midiNums = audioToMidiNumbers(audio,sampleRate, clipRate);
+		double tempo = clipRate*60/16;
+		return midiNumsToJFugueString(midiNums,tempo);
+
+	}
+	static String midiNumsToJFugueString(int[] midiNums, double tempo ){
+		return midiNumsToJFugueString(midiNums, tempo, 0.0625);
+	}
+	 static String midiNumsToJFugueString(int[] midiNums, double tempo, double baseDuration ){
 		for(int i=0; i<midiNums.length;i++){
 			if(midiNums[i]<=23){//Turn the note into a rest. This is well below the range of human voice. ~30hz.
 				midiNums[i] = -1;
 			}
 		}
 		StringBuilder out = new StringBuilder();
+		out.delete(0,out.length());
 		out.append("T[");
-		out.append(clipRate*60/32);
-		out.append("]");
-		int[] storedNote = new int[2];
+		out.append(tempo);
+		out.append(']');
+		int[] storedNote = {-2,-2};
 		for(int i: midiNums){
 			if(i == storedNote[0]){
 				//Same as the last note. Update the duration of the stored note
 				//Also works for rests
 				storedNote[1]++;
 			}else{
-				if(storedNote[1] != 0){
+				if(storedNote[1] != -2){
 					//Write the last note to the string.
 					if(storedNote[0]== -1){
-						out.append("R/");
+						out.append(" R/");
 					}else{
 						out.append(" [");
 						out.append(storedNote[0]);
 						out.append("]/");
 					}
+					out.append(baseDuration*storedNote[1]);
 				}
-				out.append(.03125*storedNote[1]);
 				//Update the stored note.
 				storedNote[0] = i;
 				storedNote[1] = 1;
-			}	
+			}
 		}
+		out.append(" [");
+		out.append(storedNote[0]);
+		out.append("]/");
+		out.append(baseDuration*storedNote[1]);
 		return out.toString();
 	}
 	
