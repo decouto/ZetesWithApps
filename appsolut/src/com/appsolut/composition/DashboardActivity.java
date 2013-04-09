@@ -172,7 +172,7 @@ public class DashboardActivity extends SherlockActivity {
                 }
             });
             fl_recent_projects.removeAllViews();
-            fl_recent_projects.addView(lv_recent_projects, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+            fl_recent_projects.addView(lv_recent_projects, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         }
     }
     

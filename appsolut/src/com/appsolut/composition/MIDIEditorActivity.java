@@ -24,7 +24,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-public class MIDIEditorActivity extends Activity {
+public class MidiEditorActivity extends Activity {
 
     private GLSurfaceView mGLView;
 

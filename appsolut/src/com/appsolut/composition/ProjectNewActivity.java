@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -25,8 +27,9 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.appsolut.composition.utils.DatabaseHandler;
+import com.appsolut.composition.utils.TaskCallback;
 
-public class ProjectNewActivity extends SherlockActivity {
+public class ProjectNewActivity extends SherlockActivity implements TaskCallback {
     
     private Context mContext;
     
@@ -51,10 +54,12 @@ public class ProjectNewActivity extends SherlockActivity {
     
     // recording elements
     private static final String LOG_TAG = "AudioRecording";
+    private static String mDirectoryPath;
     private static String mFileName;
 
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
+    private boolean recording_exists = false;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,36 +100,58 @@ public class ProjectNewActivity extends SherlockActivity {
         et_project_bpm.setText(String.valueOf(project_bpm));
         
         // set recording values
-        String path = getFilesDir().getAbsolutePath()
+        mDirectoryPath = getFilesDir().getAbsolutePath()
                 +File.separator
                 +"projects"
                 +File.separator
                 +project_id
                 +File.separator;
-        File directory = new File(path);
+        File directory = new File(mDirectoryPath);
         directory.mkdirs();
-        mFileName = path + project_id + ".3gp";
+        mFileName = mDirectoryPath + project_id + ".3gp";
         
         // set listeners
         btn_cancel.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
-                // TODO - confirmation dialog, remove possible folder w/ recording
-                db.removeComposition(project_id);
-                finish();
+                AlertDialog.Builder adb_confirm_cancel = new AlertDialog.Builder(mContext);
+                adb_confirm_cancel.setTitle("Cancel New Project");
+                adb_confirm_cancel
+                        .setMessage("Are you sure you want to cancel your new project?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.removeComposition(project_id);
+                                File directory = new File(mDirectoryPath);
+                                directory.delete();
+                                dialog.dismiss();
+                                finish();                                
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog ad_confirm_cancel = adb_confirm_cancel.create();
+                ad_confirm_cancel.show();
             }
         });
         btn_save.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
-                String name = et_project_name.getText().toString();
-                String description = et_project_description.getText().toString();
-                int bpm = Integer.parseInt(et_project_bpm.getText().toString());
-                db.updateComposition(project_id, name, description, bpm);
-                Intent projectIntent = new Intent(mContext, ProjectOverviewActivity.class);
-                projectIntent.putExtra("project_id", project_id);
-                startActivity(projectIntent);
-                finish();
+                if (!recording_exists) {
+                    Toast.makeText(mContext, "No recording exists!", Toast.LENGTH_LONG).show();
+                } else {
+                    String et_name = et_project_name.getText().toString();
+                    String name = et_name.equals("") ? project_name : et_name;
+                    String description = et_project_description.getText().toString();
+                    String et_bpm = et_project_bpm.getText().toString();
+                    int bpm = et_bpm.matches("\\d{2,3}") ? Integer.parseInt(et_bpm) : project_bpm;
+                    db.updateComposition(project_id, name, description, bpm);
+                }
             }
         });
     }
@@ -195,8 +222,9 @@ public class ProjectNewActivity extends SherlockActivity {
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
-        btn_playback.setEnabled(true);
+        btn_playback.setVisibility(View.INVISIBLE);
         mRecorder = null;
+        recording_exists = true;
     }
     
     private void startPlaying() {
@@ -227,6 +255,18 @@ public class ProjectNewActivity extends SherlockActivity {
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
+        }
+    }
+
+    @Override
+    public void done(Intent callbackIntent, Boolean finish) {
+        
+        if (callbackIntent != null) {
+            startActivity(callbackIntent);
+        }
+        
+        if (finish != null && finish) {
+            finish();
         }
     }
 
