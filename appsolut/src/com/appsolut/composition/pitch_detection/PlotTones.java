@@ -40,42 +40,9 @@ public class PlotTones {
 		double[] windowedAudio = new double[windowSize];
 		//Iterating along the input Audio calculate the prominent frequency in a window centered on every sample
 		//Move the window over slide units every time
-//		System.out.println("######################################");
-//		System.out.print("audio:  ");
-//		for(int i=0; i<10;i++){
-//			System.out.print(audio[i*4400]);
-//			System.out.print(",  ");
-//		}
-//		System.out.println(";");
 		for(int i=0; i<numWindows; i++){
 			window(windowedAudio,audio,i*slide + windowSize/2);
-//			System.out.println("*************************************");
-//			System.out.print("center:  ");
-//			System.out.println(i*slide + windowSize/2);
-//			System.out.print("audio.length:  ");
-//			System.out.println(audio.length);
-//			System.out.print("audio:  ");
-//			for(int j=0; j<10;j++){
-//				System.out.print(audio[j*4400]);
-//				System.out.print(",  ");
-//			}
-//			System.out.println(";");
-//			System.out.print("audio in window:  ");
-//			System.out.print(audio[i*slide+3]);
-//			System.out.print(",  ");
-//			System.out.print(audio[i*slide + windowSize/2]);
-//			System.out.print(",  ");
-//			System.out.print(audio[i*slide + windowSize - 3]);
-//			System.out.println(";");
-//			System.out.print("windowedAudio:  ");
-//			System.out.print(windowedAudio[3]);
-//			System.out.print(",  ");
-//			System.out.print(windowedAudio[windowedAudio.length/2]);
-//			System.out.print(",  ");
-//			System.out.print(windowedAudio[windowedAudio.length -3]);
-//			System.out.println(";");
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
-//			System.out.println(inpFreqs[i]);
 		}
 		return inpFreqs;
 	}
