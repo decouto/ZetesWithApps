@@ -2,11 +2,8 @@ package com.appsolut.composition.pitch_detection;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.StringBuilder;
-import com.leff.midi.event.*;
 import com.leff.midi.*;
-import java.lang.ArrayList;
+import java.util.ArrayList;
 
 
 public class WaveToMidi {
@@ -30,19 +27,24 @@ public class WaveToMidi {
 	
 	public File audioToMidiFile(double[] audio, long sampleRate, int clipRate){
 		MidiTrack track = new MidiTrack();
-		Pair<int[],long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
+		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
 		long onTick = 0;
 		for(int i=0;i<midiNums.left.length;i++){
 			track.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
 			onTick += midiNums.right[i];
 		}
 		File f = new File("I don't know what to put here") ;
-		FileOutputStream o = new FileOutputStream(f);
-		track.writeToFile(o);
+		try {
+			FileOutputStream o  = new FileOutputStream(f);
+			track.writeToFile(o);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 		
 	}
-	public Pair<int[],long[]> getMidiNumsWithTicks(int[] midiNums){
+	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums){
 		long TICKS_PER_OCCURRENCE = 100;
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
@@ -50,11 +52,11 @@ public class WaveToMidi {
 			newMidiNums.add(m);
 			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
 		}
-		int[] outMidiNums;
+		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
-		long[] outTicksPer;
+		Long[] outTicksPer = new Long[0];
 		outTicksPer = ticksPerMidiNum.toArray(outTicksPer);
-		return new Pair<int[],long[]>(outMidiNums,outTicksPer);
+		return new Pair<Integer[],Long[]>(outMidiNums,outTicksPer);
 		
 	}
 	
