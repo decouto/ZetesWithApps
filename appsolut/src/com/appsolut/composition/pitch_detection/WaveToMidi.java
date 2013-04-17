@@ -1,9 +1,13 @@
 package com.appsolut.composition.pitch_detection;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.StringBuilder;
-import org.jfugue.Player;
+import com.leff.midi.event.*;
+import com.leff.midi.*;
+import java.lang.ArrayList;
+
 
 public class WaveToMidi {
 	private final static double[] FREQS_MIDI_OCT_0 = {	261.6255653006,
@@ -25,71 +29,36 @@ public class WaveToMidi {
 	}
 	
 	public File audioToMidiFile(double[] audio, long sampleRate, int clipRate){
-		String JFugueString = this.audioToJFugueMusicString(audio, sampleRate, clipRate);
-		Player player = new Player();
-		File out = new File("midi_data");
-		try {
-			player.saveMidi(JFugueString, out);
-		} catch (IOException e) {
-			e.printStackTrace();
+		MidiTrack track = new MidiTrack();
+		Pair<int[],long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
+		long onTick = 0;
+		for(int i=0;i<midiNums.left.length;i++){
+			track.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
+			onTick += midiNums.right[i];
 		}
-		return out;
+		File f = new File("I don't know what to put here") ;
+		FileOutputStream o = new FileOutputStream(f);
+		track.writeToFile(o);
+		return f;
+		
 	}
-
-	public String audioToJFugueMusicString(double[] audio, long sampleRate){
-		return audioToJFugueMusicString(audio,sampleRate,DEFAULT_CLIP_RATE);
-	}
-	public String audioToJFugueMusicString(double[] audio, long sampleRate, int clipRate) {
-		int[] midiNums = audioToMidiNumbers(audio,sampleRate, clipRate);
-		double tempo = clipRate*60/16;
-		return midiNumsToJFugueString(midiNums,tempo);
-
-	}
-	static String midiNumsToJFugueString(int[] midiNums, double tempo ){
-		return midiNumsToJFugueString(midiNums, tempo, 0.0625);
-	}
-	 static String midiNumsToJFugueString(int[] midiNums, double tempo, double baseDuration ){
-		for(int i=0; i<midiNums.length;i++){
-			if(midiNums[i]<=23){//Turn the note into a rest. This is well below the range of human voice. ~30hz.
-				midiNums[i] = -1;
-			}
+	public Pair<int[],long[]> getMidiNumsWithTicks(int[] midiNums){
+		long TICKS_PER_OCCURRENCE = 100;
+		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
+		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
+		for(int m: midiNums){
+			newMidiNums.add(m);
+			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
 		}
-		StringBuilder out = new StringBuilder();
-		out.delete(0,out.length());
-		out.append("T[");
-		out.append(tempo);
-		out.append(']');
-		int[] storedNote = {-2,-2};
-		for(int i: midiNums){
-			if(i == storedNote[0]){
-				//Same as the last note. Update the duration of the stored note
-				//Also works for rests
-				storedNote[1]++;
-			}else{
-				if(storedNote[1] != -2){
-					//Write the last note to the string.
-					if(storedNote[0]== -1){
-						out.append(" R/");
-					}else{
-						out.append(" [");
-						out.append(storedNote[0]);
-						out.append("]/");
-					}
-					out.append(baseDuration*storedNote[1]);
-				}
-				//Update the stored note.
-				storedNote[0] = i;
-				storedNote[1] = 1;
-			}
-		}
-		out.append(" [");
-		out.append(storedNote[0]);
-		out.append("]/");
-		out.append(baseDuration*storedNote[1]);
-		return out.toString();
+		int[] outMidiNums;
+		outMidiNums = newMidiNums.toArray(outMidiNums);
+		long[] outTicksPer;
+		outTicksPer = ticksPerMidiNum.toArray(outTicksPer);
+		return new Pair<int[],long[]>(outMidiNums,outTicksPer);
+		
 	}
 	
-	static int[] audioToMidiNumbers(double[] audio, long sampleRate, int clipRate){
+	static int[] audioToMidiNums(double[] audio, long sampleRate, int clipRate){
 		return 	snapIntervals(
 				freqsToRawIntervals(
 				PlotTones.audioToFreqs(audio, sampleRate, clipRate)));

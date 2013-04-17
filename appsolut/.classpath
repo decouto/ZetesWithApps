@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/jfugue-4.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/jtransforms-2.4.jar"/>
+	<classpathentry kind="lib" path="libs/android-midi-libv3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
