@@ -78,6 +78,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
         Log.d("bchrobot", "Created directory");
     }
     
+    @Override
     protected void onPreExecute() {        
         Log.d("bchrobot", "Pre-execute: opening file resource");
         // Open file and convert to double[]
@@ -122,6 +123,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
         }
     }
     
+    @Override
     protected File doInBackground(Void...voids) {
         // byte[] pcm = new byte[buf_info.size];
         // codecOutputBuffers[outputBufferIndex].get(pcm, 0, buf_info.size);
@@ -149,12 +151,12 @@ public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
         return midi_output;
     }
     
-    protected void onPostExecute(File... files) {
+    @Override
+    protected void onPostExecute(File midi) {
         
         Log.d("bchrobot", "onPostExecute: copying file");
         
         // Copy them files
-        File midi = files[0];
         File out_path = new File(output_dir_path + project_id + ".midi");
         try {
             InputStream in = new FileInputStream(midi);
