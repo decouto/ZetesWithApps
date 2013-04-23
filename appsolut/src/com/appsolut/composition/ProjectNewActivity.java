@@ -13,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -27,6 +26,8 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.appsolut.composition.utils.DatabaseHandler;
+import com.appsolut.composition.utils.GenerateMidiTask;
+import com.appsolut.composition.utils.RecordWavTask;
 import com.appsolut.composition.utils.TaskCallback;
 
 public class ProjectNewActivity extends SherlockActivity implements TaskCallback {
@@ -57,7 +58,6 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
     private static String mDirectoryPath;
     private static String mFileName;
 
-    private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
     private boolean recording_exists = false;
     
@@ -80,7 +80,7 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         // create layout elements
         btn_record = new RecordButton(mContext, 80);
         btn_playback = new PlaybackButton(mContext, 80);
-        btn_playback.setEnabled(false);
+        btn_playback.setVisibility(View.INVISIBLE);
         fl_record_btn.addView(btn_record);
         fl_playback_btn.addView(btn_playback);
         
@@ -151,6 +151,8 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
                     String et_bpm = et_project_bpm.getText().toString();
                     int bpm = et_bpm.matches("\\d{2,3}") ? Integer.parseInt(et_bpm) : project_bpm;
                     db.updateComposition(project_id, name, description, bpm);
+                    GenerateMidiTask generateMidi = new GenerateMidiTask(mContext, ProjectNewActivity.this, project_id);
+                    generateMidi.execute();
                 }
             }
         });
@@ -158,22 +160,24 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
     
     class RecordButton extends Button {
         boolean mRecording = false;
+        RecordWavTask recordTask;
         
         public RecordButton(Context mContext, int size) {
             super(mContext);
             setBackgroundResource(R.drawable.record_button_start_drawable);
             setLayoutParams(new LayoutParams(size, size));
             setOnClickListener(clicker);
+            recordTask = new RecordWavTask();
         }
         
         OnClickListener clicker = new OnClickListener() {
             public void onClick(View v) {
                 if (mRecording) {
                     setBackgroundResource(R.drawable.record_button_start_drawable);
-                    stopRecording();
+                    recordTask.cancel(true);
                 } else {
                     setBackgroundResource(R.drawable.record_button_stop_drawable);
-                    startRecording();
+                    recordTask.execute(project_id);
                 }
                 mRecording = !mRecording;
             }
@@ -204,29 +208,6 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         };
     }
     
-    private void startRecording() {
-        btn_playback.setEnabled(false);
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "mRecorder.prepare() failed");
-        }
-        mRecorder.start();
-    }
-    
-    private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        btn_playback.setVisibility(View.INVISIBLE);
-        mRecorder = null;
-        recording_exists = true;
-    }
-    
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
@@ -247,11 +228,6 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
     @Override
     public void onPause() {
         super.onPause();
-        if (mRecorder != null) {
-            mRecorder.release();
-            mRecorder = null;
-        }
-
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
