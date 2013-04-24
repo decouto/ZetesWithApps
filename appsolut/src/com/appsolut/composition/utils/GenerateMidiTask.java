@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -16,6 +15,7 @@ import android.os.Environment;
 
 import com.appsolut.composition.ProjectOverviewActivity;
 import com.appsolut.composition.pitch_detection.WaveToMidi;
+import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 
 public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
@@ -103,10 +103,10 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
     protected void onPostExecute(MidiTrack track) {        
         // Copy them files
         File midi = new File(dir, project_id + ".midi");
-        FileOutputStream fos;
         try {
-            fos = new FileOutputStream(midi);
-            track.writeToFile(fos);
+            MidiFile midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
+            midiFile.addTrack(track);
+            midiFile.writeToFile(midi);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
