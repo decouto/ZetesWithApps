@@ -14,7 +14,7 @@ import android.os.Environment;
 public class RecordWavTask extends AsyncTask<Long, Void, Void> {
     
     // Capture audio at 16kHz
-    private int frequency;
+    private int sample_rate;
     private int channelConfiguration;
     private int audioEncoding;
     private final int bufferSize;
@@ -35,14 +35,14 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
     
     public RecordWavTask() {
         // Capture audio at 16kHz
-        frequency = 16000;
+        sample_rate = 16000;
         channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
         audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-        bufferSize = AudioRecord.getMinBufferSize(frequency, channelConfiguration, audioEncoding);
+        bufferSize = AudioRecord.getMinBufferSize(sample_rate, channelConfiguration, audioEncoding);
         
         // Recording
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                frequency, channelConfiguration,
+                sample_rate, channelConfiguration,
                 audioEncoding, bufferSize);
         
         // Buffers
@@ -59,7 +59,6 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
     @Override
     protected Void doInBackground(Long... params) {
         double project_id = params[0];
-        String str_project_id = String.valueOf((int) project_id);
         
         // Storage IO
         sdCard = Environment.getExternalStorageDirectory();
@@ -69,10 +68,10 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
                 + File.separator
                 + "projects"
                 + File.separator
-                + str_project_id
+                + (int) project_id
                 + File.separator);
         dir.mkdirs();
-        file = new File(dir, str_project_id + ".rawwav");
+        file = new File(dir, (int) project_id + ".rawwav");
         try {
             fos = new FileOutputStream(file, true);
         } catch (FileNotFoundException e) {
@@ -87,9 +86,10 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
             
             audioRecord.read(buffer, 0, bufferSize);
             
+            // TODO Big-endian vs. Little-endian
             for (int i = 0; i < buffer.length; i++) {
-                fileBuffer[i*2] = (byte)(buffer[i] & (short)0xFF);
-                fileBuffer[i*2 + 1] = (byte)(buffer[i] >> 8);
+                fileBuffer[i*2] = (byte) (buffer[i] & 0xFF);
+                fileBuffer[i*2 + 1] = (byte) ((buffer[i] >> 8) & 0xFF);
             }
             
             try {
