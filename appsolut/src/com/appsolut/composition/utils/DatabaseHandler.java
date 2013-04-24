@@ -115,6 +115,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // TODO args.put(
         
         long result = db.update(TABLE_COMPOSITIONS, args, KEY_ID + "=" + project_id, null);
+        db.close();
+        
         return result;
     }
     

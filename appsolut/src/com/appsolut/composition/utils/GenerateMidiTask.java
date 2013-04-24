@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 import android.app.ProgressDialog;
@@ -18,8 +16,9 @@ import android.os.Environment;
 
 import com.appsolut.composition.ProjectOverviewActivity;
 import com.appsolut.composition.pitch_detection.WaveToMidi;
+import com.leff.midi.MidiTrack;
 
-public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
+public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
     
     // User flow
     private Context mContext;
@@ -38,9 +37,11 @@ public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
     
     public GenerateMidiTask (Context context, TaskCallback callback, long project_id) {
         // User flow
-        this.mContext = context;
+        this.mContext = context.getApplicationContext();
         this.mCallback = callback;
         this.project_id = project_id;
+
+        pd_conversion = new ProgressDialog(context);
         
         // MIDI generation
         midi_generator = new WaveToMidi();
@@ -59,20 +60,17 @@ public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
     protected void onPreExecute() {
         // Open file resource
         audio_file = new File(dir, project_id + ".rawwav");
-        int length = (int) audio_file.length() / 8;
         
         // Prepare dialog
-        pd_conversion = new ProgressDialog(mContext);
         pd_conversion.setTitle("Working...");
         pd_conversion.setIndeterminate(false);
-        pd_conversion.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd_conversion.setMax(length);
+        pd_conversion.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd_conversion.show();
     }
     
     @Override
-    protected File doInBackground(Void...voids) {
-        File result = null;
+    protected MidiTrack doInBackground(Void...voids) {        
+        MidiTrack track = null;
         try {
             // Read file into byte array
             byte [] fileData = new byte[(int) audio_file.length()];
@@ -81,32 +79,34 @@ public class GenerateMidiTask extends AsyncTask<Void, Void, File>{
             dis.close();
             
             // Convert byte array into double array
-            double[] data = ByteBuffer.wrap(fileData).asDoubleBuffer().array();
+            double[] data = new double[(int) audio_file.length() / 4];
+            ByteBuffer bb = ByteBuffer.wrap(fileData);
+            for (int i = 0; bb.position() < bb.limit() - 8; i++) {
+                data[i] = bb.getDouble();
+            }
             
             // Convert to MIDI file
-            result = midi_generator.audioToMidiFile(data, 16000);
+            track = midi_generator.audioToMidiFile(data, 16000);
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        return result;
+        return track;
     }
     
     @Override
-    protected void onPostExecute(File midi) {        
+    protected void onProgressUpdate(Integer...integers) {
+        pd_conversion.setProgress(integers[0]);
+    }
+    
+    @Override
+    protected void onPostExecute(MidiTrack track) {        
         // Copy them files
-        File out_path = new File(dir, project_id + ".midi");
+        File midi = new File(dir, project_id + ".midi");
+        FileOutputStream fos;
         try {
-            InputStream in = new FileInputStream(midi);
-            OutputStream out = new FileOutputStream(out_path);
-            
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
+            fos = new FileOutputStream(midi);
+            track.writeToFile(fos);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

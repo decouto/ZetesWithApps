@@ -86,7 +86,6 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
             
             audioRecord.read(buffer, 0, bufferSize);
             
-            // TODO Big-endian vs. Little-endian
             for (int i = 0; i < buffer.length; i++) {
                 fileBuffer[i*2] = (byte) (buffer[i] & 0xFF);
                 fileBuffer[i*2 + 1] = (byte) ((buffer[i] >> 8) & 0xFF);

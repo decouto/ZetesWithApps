@@ -175,6 +175,7 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
                 if (mRecording) {
                     setBackgroundResource(R.drawable.record_button_start_drawable);
                     recordTask.cancel(true);
+                    recording_exists = true;
                 } else {
                     setBackgroundResource(R.drawable.record_button_stop_drawable);
                     recordTask.execute(project_id);
