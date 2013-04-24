@@ -39,9 +39,16 @@ public class WaveToMidi {
 		long TICKS_PER_OCCURRENCE = 100;
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
+		int lastNum = midiNums[0];
+		int dur = 0;
 		for(int m: midiNums){
-			newMidiNums.add(m);
-			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
+			if(m != lastNum){
+				newMidiNums.add(m);
+				ticksPerMidiNum.add(dur*TICKS_PER_OCCURRENCE);
+				lastNum = m;
+			}else{
+				dur++;
+			}
 		}
 		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
