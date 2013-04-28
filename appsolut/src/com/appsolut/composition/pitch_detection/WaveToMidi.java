@@ -39,11 +39,11 @@ public class WaveToMidi {
 		
 	}
 	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums){
-		long TICKS_PER_OCCURRENCE = 100;
+		long TICKS_PER_OCCURRENCE = 12;
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
 		int lastNum = midiNums[0];
-		int dur = 0;
+		int dur = 1;
 		for(int m: midiNums){
 			if(m != lastNum){
 				newMidiNums.add(m);
