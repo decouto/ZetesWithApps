@@ -83,7 +83,7 @@
         android:hint="@string/new_project_description" />
     
     <!-- Project Audio -->
-    <TextView android:id="@+id/tv_project_audio"
+    <!--<TextView android:id="@+id/tv_project_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_project_description"
@@ -91,10 +91,10 @@
         android:layout_marginTop="20dip"
         android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:text="@string/new_project_audio" />
+        android:text="@string/new_project_audio" />-->
     
 	    <!-- Recording Controls -->
-		<TextView android:id="@+id/tv_record_audio"
+		<!--<TextView android:id="@+id/tv_record_audio"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/tv_project_audio"
@@ -102,34 +102,16 @@
 	        android:layout_marginTop="10dip"
 	        android:layout_marginLeft="10dp"
 	        android:textSize="16sp"
-	        android:text="@string/record_audio" />
+	        android:text="@string/record_audio" />-->
 		
 		<FrameLayout android:id="@+id/fl_record_btn"
 		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@+id/tv_project_audio"
-		    android:layout_alignParentRight="true"
+		    android:layout_height="fill_parent"
+		    android:layout_below="@+id/et_project_description"
+		    android:layout_above="@+id/ll_new_project_menu"
+		    android:layout_centerHorizontal="true"
 	        android:layout_marginTop="10dip"
-	        android:layout_marginRight="10dp" />
-		
-		<!-- Playback Controls -->
-		<TextView android:id="@+id/tv_playback_audio"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/fl_record_btn"
-	        android:layout_alignParentLeft="true"
-	        android:layout_marginTop="10dip"
-	        android:layout_marginLeft="10dp"
-	        android:textSize="16sp"
-	        android:text="@string/playback_audio" />
-		
-		<FrameLayout android:id="@+id/fl_playback_btn"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@+id/fl_record_btn"
-		    android:layout_alignParentRight="true"
-	        android:layout_marginTop="10dip"
-	        android:layout_marginRight="10dp" />
+	        android:layout_marginBottom="10dp" />
     
     <!-- Menu -->
     <LinearLayout android:id="@+id/ll_new_project_menu"

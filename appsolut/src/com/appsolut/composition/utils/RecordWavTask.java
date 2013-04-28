@@ -6,13 +6,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.widget.Toast;
 
-public class RecordWavTask extends AsyncTask<Long, Void, Void> {
+public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
+    
+    Context mContext;
+    Boolean is_saved = false;
     
     // Capture audio at 16kHz
     private int sample_rate;
@@ -35,7 +40,10 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
     private File file;
 
     
-    public RecordWavTask() {
+    public RecordWavTask(Context context) {
+        
+        mContext = context.getApplicationContext();
+        
         // Capture audio at 16kHz
         sample_rate = 16000;
         channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
@@ -59,7 +67,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Long... params) {
+    protected Boolean doInBackground(Long... params) {
         double project_id = params[0];
         
         // Storage IO
@@ -95,36 +103,31 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //fileBuffer[i*2] = (byte) (buffer[i] & 0xFF);
-                //fileBuffer[i*2 + 1] = (byte) ((buffer[i] >> 8) & 0xFF);
             }
-            
-//            try {
-//                fos.write(fileBuffer);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
         }
         
         try {
             dos.close();
             fos.close();
+            return (is_saved = true);
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        return null;
+        return (is_saved = false);
     }
     
     @Override
     protected void onCancelled() {
-        // Do nothing
+        String message = is_saved ? "Recording created successfully" : "WARNING: recording could not be saved";
+        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
     
     @Override
     // Invoked on UI thread if not cancelled
-    protected void onPostExecute(Void voids) {
-        // Do nothing because there is no need to update the UI
+    protected void onPostExecute(Boolean result) {
+        String message = result ? "Recording created successfully" : "WARNING: recording could not be saved";
+        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
 
 }

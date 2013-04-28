@@ -12,10 +12,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.appsolut.composition.utils.DatabaseHandler;
 
-public class ProjectListActivity extends SherlockActivity {
+public class ProjectListActivity extends SherlockListActivity {
     
     private Context mContext;
     private DatabaseHandler db;

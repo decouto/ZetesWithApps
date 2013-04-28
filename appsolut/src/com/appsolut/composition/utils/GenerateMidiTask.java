@@ -61,7 +61,8 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
         audio_file = new File(dir, project_id + ".rawwav");
         
         // Prepare dialog
-        pd_conversion.setTitle("Working...");
+        pd_conversion.setTitle("Processing Audio");
+        pd_conversion.setMessage("Hold on while our leprechaun transcribes your song...");
         pd_conversion.setIndeterminate(false);
         pd_conversion.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd_conversion.show();

@@ -1,8 +1,5 @@
 package com.appsolut.composition;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -12,16 +9,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -39,12 +35,12 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
     private EditText et_project_bpm;
     private EditText et_project_description;
     private FrameLayout fl_record_btn;
-    private FrameLayout fl_playback_btn;
+    // private FrameLayout fl_playback_btn;
     private Button btn_cancel;
     private Button btn_save;
     
     private RecordButton btn_record;
-    private PlaybackButton btn_playback;
+    //private PlaybackButton btn_playback;
     
     // project details
     private DatabaseHandler db;
@@ -53,12 +49,6 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
     private String project_name;
     private int project_bpm;
     
-    // recording elements
-    private static final String LOG_TAG = "AudioRecording";
-    private static String mDirectoryPath;
-    private static String mFileName;
-
-    private MediaPlayer mPlayer;
     private boolean recording_exists = false;
     
     @Override
@@ -73,16 +63,17 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         et_project_bpm = (EditText) findViewById(R.id.et_project_bpm);
         et_project_description = (EditText) findViewById(R.id.et_project_description);
         fl_record_btn = (FrameLayout) findViewById(R.id.fl_record_btn);
-        fl_playback_btn = (FrameLayout) findViewById(R.id.fl_playback_btn);
+        //fl_playback_btn = (FrameLayout) findViewById(R.id.fl_playback_btn);
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btn_save = (Button) findViewById(R.id.btn_save_project);
         
         // create layout elements
-        btn_record = new RecordButton(mContext, 80);
-        btn_playback = new PlaybackButton(mContext, 80);
-        btn_playback.setVisibility(View.INVISIBLE);
+        btn_record = new RecordButton(mContext, 120);
         fl_record_btn.addView(btn_record);
-        fl_playback_btn.addView(btn_playback);
+        fl_record_btn.setForegroundGravity(Gravity.BOTTOM);
+        //btn_playback = new PlaybackButton(mContext, 80);
+        //btn_playback.setVisibility(View.INVISIBLE);
+        //fl_playback_btn.addView(btn_playback);
         
         // project details
         db = new DatabaseHandler(mContext);
@@ -95,20 +86,9 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         // setting defaults
         shared_preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         project_name = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date());
-        project_bpm = Integer.parseInt(shared_preferences.getString("prefDefaultBPM", "130"));
+        project_bpm = Integer.parseInt(shared_preferences.getString("prefDefaultBPM", "120"));
         et_project_name.setText(project_name);
         et_project_bpm.setText(String.valueOf(project_bpm));
-        
-        // set recording values
-        mDirectoryPath = getFilesDir().getAbsolutePath()
-                +File.separator
-                +"projects"
-                +File.separator
-                +project_id
-                +File.separator;
-        File directory = new File(mDirectoryPath);
-        directory.mkdirs();
-        mFileName = mDirectoryPath + project_id + ".3gp";
         
         // set listeners
         btn_cancel.setOnClickListener(new OnClickListener(){
@@ -123,8 +103,6 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 db.removeComposition(project_id);
-                                File directory = new File(mDirectoryPath);
-                                directory.delete();
                                 dialog.dismiss();
                                 finish();                                
                             }
@@ -165,9 +143,12 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         public RecordButton(Context mContext, int size) {
             super(mContext);
             setBackgroundResource(R.drawable.record_button_start_drawable);
-            setLayoutParams(new LayoutParams(size, size));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(120, 120);
+            params.weight = 1;
+            params.gravity = Gravity.BOTTOM;
+            setLayoutParams(params);
             setOnClickListener(clicker);
-            recordTask = new RecordWavTask();
+            recordTask = new RecordWavTask(mContext);
         }
         
         OnClickListener clicker = new OnClickListener() {
@@ -184,56 +165,6 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
             }
         };
     }
-    
-    class PlaybackButton extends Button {
-        boolean mPlaying = false;
-        
-        public PlaybackButton(Context mContext, int size) {
-            super(mContext);
-            setBackgroundResource(R.drawable.record_button_start_drawable);
-            setLayoutParams(new LayoutParams(size, size));
-            setOnClickListener(clicker);
-        }
-        
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-                if (mPlaying) {
-                    setBackgroundResource(R.drawable.record_button_start_drawable);
-                    stopPlaying();
-                } else {
-                    setBackgroundResource(R.drawable.record_button_stop_drawable);
-                    startPlaying();
-                }
-                mPlaying = !mPlaying;
-            }
-        };
-    }
-    
-    private void startPlaying() {
-        mPlayer = new MediaPlayer();
-        try {
-            FileInputStream fileInputStream = new FileInputStream(mFileName);
-            mPlayer.setDataSource(fileInputStream.getFD());
-            mPlayer.prepare();
-            mPlayer.start();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "mPlayer.prepare() failed");
-        }
-    }
-
-    private void stopPlaying() {
-        mPlayer.release();
-        mPlayer = null;
-    }
-    
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mPlayer != null) {
-            mPlayer.release();
-            mPlayer = null;
-        }
-    }
 
     @Override
     public void done(Intent callbackIntent, Boolean finish) {
@@ -246,5 +177,7 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
             finish();
         }
     }
+    
+    
 
 }
