@@ -16,9 +16,8 @@ import android.os.Environment;
 import com.appsolut.composition.ProjectOverviewActivity;
 import com.appsolut.composition.pitch_detection.WaveToMidi;
 import com.leff.midi.MidiFile;
-import com.leff.midi.MidiTrack;
 
-public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
+public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     
     // User flow
     private Context mContext;
@@ -69,8 +68,8 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
     }
     
     @Override
-    protected MidiTrack doInBackground(Void...voids) {        
-        MidiTrack track = null;
+    protected MidiFile doInBackground(Void...voids) {        
+        MidiFile track = null;
         try {
             // Read file into byte array
             byte [] fileData = new byte[(int) audio_file.length()];
@@ -79,10 +78,10 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
             dis.close();
             
             // Convert byte array into double array
-            double[] data = new double[(int) audio_file.length() / 4];
+            double[] data = new double[(int) Math.floor(audio_file.length() / 2)];
             ByteBuffer bb = ByteBuffer.wrap(fileData);
-            for (int i = 0; bb.position() < bb.limit() - 8; i++) {
-                data[i] = bb.getDouble();
+            for (int i = 0; i < data.length; i++) {
+                data[i] = (double) bb.getShort();
             }
             
             // Convert to MIDI file
@@ -100,13 +99,11 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiTrack>{
     }
     
     @Override
-    protected void onPostExecute(MidiTrack track) {        
-        // Copy them files
-        File midi = new File(dir, project_id + ".midi");
+    protected void onPostExecute(MidiFile midiFile) {        
+        // Create .MIDI files
+        File file = new File(dir, project_id + ".midi");
         try {
-            MidiFile midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
-            midiFile.addTrack(track);
-            midiFile.writeToFile(midi);
+            midiFile.writeToFile(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

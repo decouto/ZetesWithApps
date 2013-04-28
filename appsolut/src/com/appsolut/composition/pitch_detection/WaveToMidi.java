@@ -2,6 +2,7 @@ package com.appsolut.composition.pitch_detection;
 
 import java.util.ArrayList;
 
+import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 
 
@@ -20,11 +21,12 @@ public class WaveToMidi {
 																493.8833012561};
 	private final static int DEFAULT_CLIP_RATE = 5;
 	
-	public MidiTrack audioToMidiFile(double[] audio, long sampleRate) {
+	public MidiFile audioToMidiFile(double[] audio, long sampleRate) {
 		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
 	}
 	
-	public MidiTrack audioToMidiFile(double[] audio, long sampleRate, int clipRate){
+	public MidiFile audioToMidiFile(double[] audio, long sampleRate, int clipRate){
+        MidiFile midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
 		MidiTrack track = new MidiTrack();
 		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
 		long onTick = 0;
@@ -32,7 +34,8 @@ public class WaveToMidi {
 			track.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
 			onTick += midiNums.right[i];
 		}
-		return track;
+		midiFile.addTrack(track);
+		return midiFile;
 		
 	}
 	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums){

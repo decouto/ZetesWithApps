@@ -1,5 +1,6 @@
 package com.appsolut.composition.utils;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,6 +29,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
     
     // Storage IO
     private FileOutputStream fos;
+    private DataOutputStream dos;
     private File sdCard;
     private File dir;
     private File file;
@@ -74,6 +76,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
         file = new File(dir, (int) project_id + ".rawwav");
         try {
             fos = new FileOutputStream(file, true);
+            dos = new DataOutputStream(fos);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -87,18 +90,24 @@ public class RecordWavTask extends AsyncTask<Long, Void, Void> {
             audioRecord.read(buffer, 0, bufferSize);
             
             for (int i = 0; i < buffer.length; i++) {
-                fileBuffer[i*2] = (byte) (buffer[i] & 0xFF);
-                fileBuffer[i*2 + 1] = (byte) ((buffer[i] >> 8) & 0xFF);
+                try {
+                    dos.writeShort(buffer[i]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //fileBuffer[i*2] = (byte) (buffer[i] & 0xFF);
+                //fileBuffer[i*2 + 1] = (byte) ((buffer[i] >> 8) & 0xFF);
             }
             
-            try {
-                fos.write(fileBuffer);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                fos.write(fileBuffer);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
         
         try {
+            dos.close();
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
