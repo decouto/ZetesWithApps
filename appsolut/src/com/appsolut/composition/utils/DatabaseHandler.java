@@ -11,9 +11,9 @@ import android.support.v4.util.LongSparseArray;
  
 public class DatabaseHandler extends SQLiteOpenHelper {
  
-    // All Static variables
+    // All Static Variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
  
     // Database Name
     private static final String DATABASE_NAME = "appsolut";
@@ -21,8 +21,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Composition table name
     private static final String TABLE_COMPOSITIONS = "compositions";
  
-    // Composition Table Columns names
-    private static final String KEY_ID = "id";
+    // Composition table column names
+    private static final String KEY_UUID = "uuid";
     private static final String KEY_COMPOSITION_NAME = "composition_name";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_DATE_CREATED = "date_created";
@@ -30,11 +30,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // User table name
     private static final String TABLE_USER = "user";
     
-    // User Table Columns names
-    private static final String KEY_UUID = "uuid";
+    // User table column names
+    private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_EMAIL_ADDRESS = "email_address";
     private static final String KEY_DATE_LOGGED_IN = "date_logged_in";
+    
+    // Media table name
+    private static final String TABLE_MEDIA = "media";
+    
+    // Media table column names
+    // private static final String KEY_UUID = "uuid";
+    private static final String KEY_COMPOSITION_ID = "composition_id";
+    private static final String KEY_SERVER_STATUS = "server_status";
+    // private static final String KEY_DATE_CREATED = "date_created";
  
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,22 +52,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + " ("
-                + KEY_ID + " INTEGER PRIMARY KEY, "
-                + KEY_UUID + " INTEGER, "
+                + KEY_UUID + " INTEGER PRIMARY KEY, "
+                + KEY_USER_ID + " INTEGER, "
                 + KEY_USER_NAME + " TEXT, "
                 + KEY_EMAIL_ADDRESS + " TEXT, "
                 + KEY_DATE_LOGGED_IN + " TEXT "
                 + ");";
         
         String CREATE_COMPOSITION_TABLE = "CREATE TABLE " + TABLE_COMPOSITIONS + " ("
-                + KEY_ID + " INTEGER PRIMARY KEY, "
+                + KEY_UUID + " INTEGER PRIMARY KEY, "
                 + KEY_COMPOSITION_NAME + " TEXT, "
                 + KEY_DESCRIPTION + " TEXT, "
                 + KEY_DATE_CREATED + " TEXT "
                 + ");";
         
+        String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ("
+                + KEY_UUID + "INTEGER PRIMARY KEY, "
+                + KEY_COMPOSITION_ID + " INTEGER, "
+                + KEY_SERVER_STATUS + " TEXT, "
+                + KEY_DATE_CREATED + " TEXT"
+                + ");";
+        
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_COMPOSITION_TABLE);
+        db.execSQL(CREATE_MEDIA_TABLE);
     }
  
     // Upgrading database
@@ -66,6 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPOSITIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDIA);
  
         // Create tables again
         onCreate(db);
@@ -114,7 +132,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         args.put(KEY_DESCRIPTION, description);
         // TODO args.put(
         
-        long result = db.update(TABLE_COMPOSITIONS, args, KEY_ID + "=" + project_id, null);
+        long result = db.update(TABLE_COMPOSITIONS, args, KEY_UUID + "=" + project_id, null);
         db.close();
         
         return result;
@@ -122,7 +140,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     
     public void removeComposition(long project_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_COMPOSITIONS, KEY_ID + "=" + project_id, null);
+        db.delete(TABLE_COMPOSITIONS, KEY_UUID + "=" + project_id, null);
         db.close();
     }
  
@@ -131,7 +149,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * */
     public HashMap<String, String> getCompositionDetails(long project_id){
         HashMap<String,String> project = new HashMap<String,String>();
-        String selectQuery = "SELECT  * FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_ID + " = '" + project_id +"';";
+        String selectQuery = "SELECT  * FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_UUID + " = '" + project_id +"';";
  
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
