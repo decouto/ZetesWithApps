@@ -41,6 +41,7 @@ public class WaveToMidi {
 	    t.setBpm(bpm);
 	    tempoTrack.insertEvent(ts);
 	    tempoTrack.insertEvent(t);
+	    midiFile.addTrack(tempoTrack);
 	}
 	
 	public MidiFile audioToMidiFile(double[] audio, long sampleRate) {
@@ -62,21 +63,21 @@ public class WaveToMidi {
 		long TICKS_PER_OCCURRENCE = 12;
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
-//		int lastNum = midiNums[0];
-//		int dur = 1;
-//		for(int m: midiNums){
-//			if(m != lastNum){
-//				newMidiNums.add(m);
-//				ticksPerMidiNum.add(dur*TICKS_PER_OCCURRENCE);
-//				lastNum = m;
-//			}else{
-//				dur++;
-//			}
-//		}
+		int lastNum = midiNums[0];
+		int dur = 1;
 		for(int m: midiNums){
-			newMidiNums.add(m);
-			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
+			if(m != lastNum){
+				newMidiNums.add(m);
+				ticksPerMidiNum.add(dur*TICKS_PER_OCCURRENCE);
+				lastNum = m;
+			}else{
+				dur++;
+			}
 		}
+//		for(int m: midiNums){
+//			newMidiNums.add(m);
+//			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
+//		}
 		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
 		Long[] outTicksPer = new Long[0];

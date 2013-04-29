@@ -45,7 +45,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
         mContext = context.getApplicationContext();
         
         // Capture audio at 16kHz
-        sample_rate = 16000;
+        sample_rate = 44100;
         channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
         audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
         bufferSize = AudioRecord.getMinBufferSize(sample_rate, channelConfiguration, audioEncoding);

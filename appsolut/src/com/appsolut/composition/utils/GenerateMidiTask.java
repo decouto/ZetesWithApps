@@ -86,7 +86,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
             }
             
             // Convert to MIDI file
-            track = midi_generator.audioToMidiFile(data, 16000);
+            track = midi_generator.audioToMidiFile(data, 44100);
         } catch (IOException e) {
             e.printStackTrace();
         }
