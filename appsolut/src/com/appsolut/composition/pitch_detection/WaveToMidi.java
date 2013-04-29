@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
+import com.leff.midi.event.meta.Tempo;
+import com.leff.midi.event.meta.TimeSignature;
 
 
 public class WaveToMidi {
@@ -21,20 +23,38 @@ public class WaveToMidi {
 																493.8833012561};
 	private final static int DEFAULT_CLIP_RATE = 5;
 	
+	// MIDI resources
+	private MidiFile midiFile;
+	private MidiTrack tempoTrack;
+	private MidiTrack noteTrack;
+	
+	public WaveToMidi(int bpm) {
+	    // MIDI Instantiation
+	    midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
+	    tempoTrack = new MidiTrack();
+	    noteTrack = new MidiTrack();
+	    
+	    // Tempo track
+	    TimeSignature ts = new TimeSignature();
+	    ts.setTimeSignature(4, 4, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
+	    Tempo t = new Tempo();
+	    t.setBpm(bpm);
+	    tempoTrack.insertEvent(ts);
+	    tempoTrack.insertEvent(t);
+	}
+	
 	public MidiFile audioToMidiFile(double[] audio, long sampleRate) {
 		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
 	}
 	
 	public MidiFile audioToMidiFile(double[] audio, long sampleRate, int clipRate){
-        MidiFile midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
-		MidiTrack track = new MidiTrack();
 		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
 		long onTick = 0;
 		for(int i=0;i<midiNums.left.length;i++){
-			track.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
+			noteTrack.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
 			onTick += midiNums.right[i];
 		}
-		midiFile.addTrack(track);
+		midiFile.addTrack(noteTrack);
 		return midiFile;
 		
 	}

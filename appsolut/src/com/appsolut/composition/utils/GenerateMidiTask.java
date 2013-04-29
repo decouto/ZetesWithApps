@@ -43,7 +43,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
         pd_conversion = new ProgressDialog(context);
         
         // MIDI generation
-        midi_generator = new WaveToMidi();
+        midi_generator = new WaveToMidi(120);   // TODO import bpm
         dir = new File( Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator
                 + "SongScribe"
@@ -57,9 +57,6 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     
     @Override
     protected void onPreExecute() {
-        // Open file resource
-        audio_file = new File(dir, project_id + ".rawwav");
-        
         // Prepare dialog
         pd_conversion.setTitle("Processing Audio");
         pd_conversion.setMessage("Hold on while our leprechaun transcribes your song...");
@@ -69,7 +66,10 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     }
     
     @Override
-    protected MidiFile doInBackground(Void...voids) {        
+    protected MidiFile doInBackground(Void...voids) {
+        // Open file resource
+        audio_file = new File(dir, project_id + ".rawwav");
+        
         MidiFile track = null;
         try {
             // Read file into byte array
