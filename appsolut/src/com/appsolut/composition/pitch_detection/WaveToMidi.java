@@ -65,8 +65,6 @@ public class WaveToMidi {
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
 		int lastNum = midiNums[0];
 		int dur = 1;
-<<<<<<< HEAD
-=======
 		for(int m: midiNums){
 			if(m != lastNum){
 				newMidiNums.add(m);
@@ -77,20 +75,6 @@ public class WaveToMidi {
 				dur++;
 			}
 		}
->>>>>>> changed comments
-		for(int m: midiNums){
-			if(m != lastNum){
-				newMidiNums.add(m);
-				ticksPerMidiNum.add(dur*TICKS_PER_OCCURRENCE);
-				lastNum = m;
-			}else{
-				dur++;
-			}
-		}
-//		for(int m: midiNums){
-//			newMidiNums.add(m);
-//			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
-//		}
 		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
 		Long[] outTicksPer = new Long[0];
