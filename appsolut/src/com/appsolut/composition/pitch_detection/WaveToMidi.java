@@ -1,11 +1,15 @@
 package com.appsolut.composition.pitch_detection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.String;
 
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
+
+import android.util.Log;  
 
 
 public class WaveToMidi {
@@ -21,7 +25,8 @@ public class WaveToMidi {
 																440.0000000000,
 																466.1637615181,
 																493.8833012561};
-	private final static int DEFAULT_CLIP_RATE = 5;//Number of frequencies/second
+	private final static int DEFAULT_CLIP_RATE = 5;
+	private static final String TAG = "HerbleGerble";
 	
 	// MIDI resources
 	private MidiFile midiFile;
@@ -75,6 +80,10 @@ public class WaveToMidi {
 				dur++;
 			}
 		}
+//		for(int m: midiNums){
+//			newMidiNums.add(m);
+//			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
+//		}
 		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
 		Long[] outTicksPer = new Long[0];
@@ -92,6 +101,7 @@ public class WaveToMidi {
 	static Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
 		int baseFreq = freqs[0];
 		double[] intervals = new double[freqs.length];
+		Log.v(TAG, Arrays.toString(freqs));
 		for(int i=0; i<freqs.length; i++){
 			intervals[i] = 12*Math.log(1.0*freqs[i]/baseFreq)/Math.log(2);//The number of half steps from baseFreq
 		}
