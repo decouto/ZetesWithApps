@@ -13,36 +13,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
     // All Static Variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
  
     // Database Name
     private static final String DATABASE_NAME = "appsolut";
- 
-    // Composition table name
-    private static final String TABLE_COMPOSITIONS = "compositions";
- 
-    // Composition table column names
-    private static final String KEY_UUID = "uuid";
-    private static final String KEY_COMPOSITION_NAME = "composition_name";
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_DATE_CREATED = "date_created";
     
     // User table name
     private static final String TABLE_USER = "user";
     
     // User table column names
-    private static final String KEY_USER_ID = "user_id";
-    private static final String KEY_USER_NAME = "user_name";
-    private static final String KEY_EMAIL_ADDRESS = "email_address";
-    private static final String KEY_DATE_LOGGED_IN = "date_logged_in";
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_USER_NAME = "user_name";
+    public static final String KEY_EMAIL_ADDRESS = "email_address";
+    public static final String KEY_DATE_LOGGED_IN = "date_logged_in";
+ 
+    // Composition table name
+    private static final String TABLE_COMPOSITIONS = "compositions";
+ 
+    // Composition table column names
+    public static final String KEY_UUID = "uuid";
+    public static final String KEY_COMPOSITION_NAME = "composition_name";
+    public static final String KEY_COMPOSITION_BPM = "bpm";
+    public static final String KEY_FILE_NAME = "file_name";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_DATE_CREATED = "date_created";
     
     // Media table name
     private static final String TABLE_MEDIA = "media";
     
     // Media table column names
     // private static final String KEY_UUID = "uuid";
-    private static final String KEY_COMPOSITION_ID = "composition_id";
-    private static final String KEY_SERVER_STATUS = "server_status";
+    public static final String KEY_COMPOSITION_ID = "composition_id";
+    public static final String KEY_SERVER_STATUS = "server_status";
     // private static final String KEY_DATE_CREATED = "date_created";
  
     public DatabaseHandler(Context context) {
@@ -62,6 +64,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_COMPOSITION_TABLE = "CREATE TABLE " + TABLE_COMPOSITIONS + " ("
                 + KEY_UUID + " INTEGER PRIMARY KEY, "
                 + KEY_COMPOSITION_NAME + " TEXT, "
+                + KEY_COMPOSITION_BPM + " INTEGER, "
+                + KEY_FILE_NAME + " TEXT, "
                 + KEY_DESCRIPTION + " TEXT, "
                 + KEY_DATE_CREATED + " TEXT "
                 + ");";
@@ -156,9 +160,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
-            project.put("name", cursor.getString(1));
-            project.put("description", cursor.getString(2));
-            project.put("dateCreated", cursor.getString(3));
+            project.put(KEY_UUID, cursor.getString(0));
+            project.put(KEY_COMPOSITION_NAME, cursor.getString(1));
+            project.put(KEY_COMPOSITION_BPM, cursor.getString(2));
+            project.put(KEY_FILE_NAME, cursor.getString(3));
+            project.put(KEY_DESCRIPTION, cursor.getString(4));
+            project.put(KEY_DATE_CREATED, cursor.getString(5));
         }
         cursor.close();
         db.close();

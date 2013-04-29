@@ -4,18 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.appsolut.composition.utils.DatabaseHandler;
 
-public class ProjectListActivity extends SherlockListActivity {
+public class ProjectListActivity extends SherlockActivity {
     
     private Context mContext;
     private DatabaseHandler db;
@@ -47,11 +47,11 @@ public class ProjectListActivity extends SherlockListActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.project_row, R.id.label, names);
             lv_project_list.setAdapter(adapter);
             lv_project_list.setOnItemClickListener(new OnItemClickListener(){
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                    String item = String.valueOf(projects.keyAt(arg2));
-                    Toast.makeText(mContext, "ProjectID " + item + " selected", Toast.LENGTH_SHORT).show();
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("ListView", "item clicked");
+                    String item = String.valueOf(projects.keyAt(position));
                     Intent projectIntent = new Intent(mContext, ProjectOverviewActivity.class);
-                    projectIntent.putExtra("project_id", projects.keyAt(arg2));
+                    projectIntent.putExtra("project_id", projects.keyAt(position));
                     startActivity(projectIntent);
                 } 
             });
