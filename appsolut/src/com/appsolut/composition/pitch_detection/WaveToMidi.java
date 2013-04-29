@@ -21,7 +21,7 @@ public class WaveToMidi {
 																440.0000000000,
 																466.1637615181,
 																493.8833012561};
-	private final static int DEFAULT_CLIP_RATE = 5;
+	private final static int DEFAULT_CLIP_RATE = 5;//Number of frequencies/second
 	
 	// MIDI resources
 	private MidiFile midiFile;
@@ -65,6 +65,19 @@ public class WaveToMidi {
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
 		int lastNum = midiNums[0];
 		int dur = 1;
+<<<<<<< HEAD
+=======
+		for(int m: midiNums){
+			if(m != lastNum){
+				newMidiNums.add(m);
+				ticksPerMidiNum.add(dur*TICKS_PER_OCCURRENCE);
+				lastNum = m;
+				dur = 1;
+			}else{
+				dur++;
+			}
+		}
+>>>>>>> changed comments
 		for(int m: midiNums){
 			if(m != lastNum){
 				newMidiNums.add(m);
