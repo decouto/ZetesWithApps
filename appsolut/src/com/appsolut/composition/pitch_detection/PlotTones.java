@@ -44,10 +44,20 @@ public class PlotTones {
 			window(windowedAudio,audio,i*slide + windowSize/2);
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
 		}
+		smoothFreqs(inpFreqs);
 		return inpFreqs;
 	}
+	
 	/**
-	 * takes inpFreqs and averages it into an array of size numClips
+	 * Modifies the input array to make it smooter
+	 * @modifies inp
+	 * @param inp the array of frequencies to be smoothed
+	 */
+	private static void smoothFreqs(int[] inp){
+		//TODO: Implement me!
+	}
+	/**
+	 * takes inpFreqs and averages (does not just bin) it into an array of size numClips
 	 * 
 	 * @param inpFreqs
 	 * @param numClips
@@ -68,6 +78,7 @@ public class PlotTones {
 		}
 		return pitches;
 	}
+	
 	/**
 	 * Modifies an array in place to give the Hann function of the input data centered on the prescribed index
 	 * 
@@ -95,6 +106,15 @@ public class PlotTones {
 		}
 	}
 	
+	/**
+	 * Uses Fourier analysis to find the most prominent frequencies in a given section of audio
+	 *  
+	 * @param inputWaveform
+	 * @param sampleRate
+	 * @param numTones
+	 * @param noiseFreqs
+	 * @return an array of frequencies sorted by prominence in descending order
+	 */
 	static int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
 		int numberBins = (int) Math.round(Math.pow(2,13));
 		if(numberBins > inputWaveform.length) numberBins = inputWaveform.length;
@@ -127,6 +147,7 @@ public class PlotTones {
 		}
 		return outArray;
 	}
+	
 	/**
 	 * Finds numMaxes of indices with associated largest values in an array.
 	 * Returns a list of the indices sorted from largest to smallest associated value.
@@ -161,6 +182,7 @@ public class PlotTones {
 		}// end i for loop
 		return outArray;
 	}
+	
 	/**
 	 * Normalizes an array of doubles by finding its average value and subtracting it from every element.
 	 * Does not modify the input array.

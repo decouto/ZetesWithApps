@@ -25,25 +25,32 @@ public class WaveToMidi {
 																440.0000000000,
 																466.1637615181,
 																493.8833012561};
+<<<<<<< HEAD
 	private final static int DEFAULT_CLIP_RATE = 5;
 	private static final String TAG = "HerbleGerble";
 	
+=======
+	private final static int DEFAULT_CLIP_RATE = 5;//Number of frequencies/second
+	private int bpm;
+	private int ppq = 192;
+	private static final int OFF_VAL = -1;
+>>>>>>> So many comments
 	// MIDI resources
 	private MidiFile midiFile;
 	private MidiTrack tempoTrack;
 	private MidiTrack noteTrack;
 	
-	public WaveToMidi(int bpm) {
+	public WaveToMidi(int _bpm) {
 	    // MIDI Instantiation
 	    midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
 	    tempoTrack = new MidiTrack();
 	    noteTrack = new MidiTrack();
-	    
+	    bpm=_bpm;
 	    // Tempo track
 	    TimeSignature ts = new TimeSignature();
 	    ts.setTimeSignature(4, 4, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
 	    Tempo t = new Tempo();
-	    t.setBpm(bpm);
+	    t.setBpm(_bpm);
 	    tempoTrack.insertEvent(ts);
 	    tempoTrack.insertEvent(t);
 	    midiFile.addTrack(tempoTrack);
@@ -53,19 +60,39 @@ public class WaveToMidi {
 		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
 	}
 	
+	/**
+	 * Taking the output from getMidiNumsWithTicks schedules midi events and produces a midi file
+	 * 
+	 * @param audio The audio to be converted to midi
+	 * @param sampleRate The sample rate the audio was recorded at
+	 * @param clipRate The number of frequencies found in the audio per second
+	 * @return
+	 */
 	public MidiFile audioToMidiFile(double[] audio, long sampleRate, int clipRate){
-		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
+		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate),clipRate);
 		long onTick = 0;
+		int midiNum = OFF_VAL;
 		for(int i=0;i<midiNums.left.length;i++){
-			noteTrack.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
+			midiNum = midiNums.left[i];
+			if(midiNum != OFF_VAL){
+				noteTrack.insertNote(0, midiNum, 127, onTick,midiNums.right[i]);
+			}
 			onTick += midiNums.right[i];
 		}
 		midiFile.addTrack(noteTrack);
 		return midiFile;
 		
 	}
-	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums){
-		long TICKS_PER_OCCURRENCE = 12;
+	
+	/**
+	 * Takes an array of midi numbers without explicitly specified durations and explicitly defines their durations.
+	 * 
+	 * @param midiNums an array of midiNumbers each corresponding to a single unit of duration. OFF_VAL indicates silence.
+	 * @param clipRate the number of frequencies found per second
+	 * @return A pair of arrays representing midi numbers and their durations in ticks
+	 */
+	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums,int clipRate){
+		long TICKS_PER_OCCURRENCE = bpm*ppq/(6*10*1000*clipRate);
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
 		int lastNum = midiNums[0];
@@ -92,12 +119,26 @@ public class WaveToMidi {
 		
 	}
 	
+	/**
+	 * Simple wrapper function that (using not so simple functions) turns input audio into a series of midi numbers without explicit duration.
+	 * 
+	 * @param audio The audio to be converted to midi
+	 * @param sampleRate The sample rate the audio was recorded at
+	 * @param clipRate The number of frequencies found in the audio per second
+	 * @return an array of midi numbers
+	 */
 	static int[] audioToMidiNums(double[] audio, long sampleRate, int clipRate){
 		return 	snapIntervals(
 				freqsToRawIntervals(
 				PlotTones.audioToFreqs(audio, sampleRate, clipRate)));
 	}
 	
+	/**
+	 * Takes an array of frequencies drawn from input audio and turns it into a set of intervals from the first frequency
+	 * 
+	 * @param freqs 
+	 * @return The first frequency and an array of intervals. The first note itself is included in the array of intervals as 0.
+	 */
 	static Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
 		int baseFreq = freqs[0];
 		double[] intervals = new double[freqs.length];
@@ -108,6 +149,12 @@ public class WaveToMidi {
 		return new Pair<Integer,double[]>(baseFreq,intervals);
 	}
 	
+	/**
+	 * Takes a base note and array of intervals and produces an array of midi numbers.
+	 * 
+	 * @param inp
+	 * @return an array of midi numbers
+	 */
 	static int[] snapIntervals(Pair<Integer,double[]> inp){
 		int baseFreq = inp.left;
 		double[] intervals = inp.right;
