@@ -25,16 +25,14 @@ public class WaveToMidi {
 																440.0000000000,
 																466.1637615181,
 																493.8833012561};
-<<<<<<< HEAD
-	private final static int DEFAULT_CLIP_RATE = 5;
 	private static final String TAG = "HerbleGerble";
 	
-=======
+
 	private final static int DEFAULT_CLIP_RATE = 5;//Number of frequencies/second
 	private int bpm;
 	private int ppq = 192;
 	private static final int OFF_VAL = -1;
->>>>>>> So many comments
+
 	// MIDI resources
 	private MidiFile midiFile;
 	private MidiTrack tempoTrack;
