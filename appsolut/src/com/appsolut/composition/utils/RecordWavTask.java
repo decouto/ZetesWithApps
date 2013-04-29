@@ -19,7 +19,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
     Context mContext;
     Boolean is_saved = false;
     
-    // Capture audio at 16kHz
+    // Capture audio at 44.1kHz
     private int sample_rate;
     private int channelConfiguration;
     private int audioEncoding;
@@ -44,7 +44,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
         
         mContext = context.getApplicationContext();
         
-        // Capture audio at 16kHz
+        // Capture audio at 44.1kHz
         sample_rate = 44100;
         channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
         audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
@@ -118,13 +118,14 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
     }
     
     @Override
+    // Invoked on UI thread after doInBackground if cancelled
     protected void onCancelled() {
         String message = is_saved ? "Recording created successfully" : "WARNING: recording could not be saved";
         Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
     
     @Override
-    // Invoked on UI thread if not cancelled
+    // Invoked on UI thread after doInBackground if not cancelled
     protected void onPostExecute(Boolean result) {
         String message = result ? "Recording created successfully" : "WARNING: recording could not be saved";
         Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();

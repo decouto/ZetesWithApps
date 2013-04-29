@@ -79,7 +79,7 @@ public class DashboardActivity extends SherlockActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Create new project
                         String projectName = et_project_name.getText().toString();
-                        long projectID = db.addComposition(projectName, "", "");
+                        long projectID = 0; // TODO db.addComposition(projectName, "", "");
                         newProjectDialog.dismiss();
                         if (projectID >= 0) {
                             // creation succeeded

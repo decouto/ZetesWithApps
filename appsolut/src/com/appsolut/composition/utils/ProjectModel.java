@@ -13,6 +13,7 @@ public class ProjectModel {
     
     // Project details
     private final long project_id;
+    private int project_bpm;
     private String project_name;
     private String project_file_name;
     private String project_description;
@@ -36,14 +37,20 @@ public class ProjectModel {
     
     public void updateDetails() {
         projectDetails = db.getCompositionDetails(project_id);
-        project_name = projectDetails.get("composition_name");
-        project_file_name = projectDetails.get("file_name");
-        project_description = projectDetails.get("description");
-        project_date_created = projectDetails.get("date_created");
+
+        project_name = projectDetails.get(DatabaseHandler.KEY_COMPOSITION_NAME);
+        project_bpm = Integer.parseInt(projectDetails.get(DatabaseHandler.KEY_COMPOSITION_BPM));
+        project_file_name = projectDetails.get(DatabaseHandler.KEY_FILE_NAME);
+        project_description = projectDetails.get(DatabaseHandler.KEY_DESCRIPTION);
+        project_date_created = projectDetails.get(DatabaseHandler.KEY_DATE_CREATED);
     }
     
     public String getName() {
         return project_name;
+    }
+    
+    public int getBpm() {
+        return project_bpm;
     }
     
     public String getFileName() {

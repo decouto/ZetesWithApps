@@ -1,5 +1,6 @@
 package com.appsolut.composition.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.ContentValues;
@@ -13,7 +14,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
     // All Static Variables
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
  
     // Database Name
     private static final String DATABASE_NAME = "appsolut";
@@ -37,6 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_FILE_NAME = "file_name";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_DATE_CREATED = "date_created";
+    public static final String KEY_TEMP = "temp";
     
     // Media table name
     private static final String TABLE_MEDIA = "media";
@@ -67,7 +69,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_COMPOSITION_BPM + " INTEGER, "
                 + KEY_FILE_NAME + " TEXT, "
                 + KEY_DESCRIPTION + " TEXT, "
-                + KEY_DATE_CREATED + " TEXT "
+                + KEY_DATE_CREATED + " TEXT, "
+                + KEY_TEMP + " INTEGER DEFAULT 1"
                 + ");";
         
         String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ("
@@ -111,13 +114,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
     /**
      * Storing composition details in database
-     * @param dateCreated String of form "mm/dd/yyyy"
+     * @param name the composition's name
+     * @param description the composition's description
+     * @param dateCreated of form "mm/dd/yyyy"
      * */
-    public long addComposition(String name, String description, String dateCreated) {
+    public long addComposition(String name, int bpm, String description, String dateCreated) {
         SQLiteDatabase db = this.getWritableDatabase();
  
         ContentValues values = new ContentValues();
-        values.put(KEY_COMPOSITION_NAME, name);                     // Name
+        values.put(KEY_COMPOSITION_NAME, name);         // Name
+        values.put(KEY_COMPOSITION_BPM, bpm);           // BPM
+        values.put(KEY_FILE_NAME, name);                // File name
         values.put(KEY_DESCRIPTION, description);       // Description
         values.put(KEY_DATE_CREATED, dateCreated);      // Date created
  
@@ -128,13 +135,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return result;
     }
     
-    public long updateComposition(long project_id, String name, String description, int bpm) {
+    /**
+     * Update a composition with select values
+     * @param project_id the project's uuid
+     * @param args the values to update; composition_name, bpm, file_name, description, date_created
+     * @return the number of rows affected
+     */
+    public long updateComposition(long project_id, ContentValues args) {
         SQLiteDatabase db = this.getWritableDatabase();
-        
-        ContentValues args = new ContentValues();
-        args.put(KEY_COMPOSITION_NAME, name);
-        args.put(KEY_DESCRIPTION, description);
-        // TODO args.put(
         
         long result = db.update(TABLE_COMPOSITIONS, args, KEY_UUID + "=" + project_id, null);
         db.close();
@@ -171,6 +179,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         // return user
         return project;
+    }
+    
+    public ArrayList<Long> getAllCompositionIds() {
+        ArrayList<Long> result = new ArrayList<Long>();
+        
+        String query = "SELECT " + KEY_UUID + " FROM " + TABLE_COMPOSITIONS + " WHERE 1;";
+        
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        // Move to first row
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            long project_id = Long.parseLong(cursor.getString(0));
+            result.add(project_id);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        
+        return result;
     }
  
     /**
@@ -239,6 +267,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_COMPOSITIONS, null, null);
+        db.close();
+    }
+    
+    /**
+     * Remove temporary compositions
+     */
+    public void sanitizeCompositions() {
+        String nameQuery = "DELETE FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_TEMP + " = 1;";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(nameQuery, null);
+        LongSparseArray<String> result = new LongSparseArray<String>();
+        cursor.moveToFirst();
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            result.put(cursor.getInt(0), cursor.getString(1));
+        }
+        cursor.close();
         db.close();
     }
  

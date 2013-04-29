@@ -53,6 +53,7 @@ public class SplashLoginActivity extends SherlockActivity {
         
         // database handler
         db = new DatabaseHandler(mContext);
+        db.sanitizeCompositions();
         
         // shared preferences
         shared_preferences = PreferenceManager.getDefaultSharedPreferences(mContext);

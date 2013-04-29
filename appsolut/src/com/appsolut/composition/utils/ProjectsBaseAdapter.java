@@ -1,10 +1,8 @@
 package com.appsolut.composition.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +14,10 @@ import com.appsolut.composition.R;
 public class ProjectsBaseAdapter extends BaseAdapter {
     
     private Activity activity;
-    private ArrayList<HashMap<String, String>> data;
+    private LongSparseArray<String> data;
     private static LayoutInflater inflater = null;
     
-    public ProjectsBaseAdapter(Activity a, ArrayList<HashMap<String, String>> d) {
+    public ProjectsBaseAdapter(Activity a, LongSparseArray<String> d) {
         activity = a;
         data = d;
         inflater =  (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -37,7 +35,7 @@ public class ProjectsBaseAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return data.keyAt(position);
     }
 
     @Override
@@ -51,11 +49,10 @@ public class ProjectsBaseAdapter extends BaseAdapter {
         TextView tv_title = (TextView) vi.findViewById(R.id.tv_project_list_title);
         
         // Create project resource
-        HashMap<String, String> project = new HashMap<String, String>();
-        project = data.get(position);
+        String project = data.valueAt(position);
         
         // Set values
-        tv_title.setText(project.get(DatabaseHandler.KEY_COMPOSITION_NAME));    // Title
+        tv_title.setText(project);    // Title
         
         return vi;
     }
