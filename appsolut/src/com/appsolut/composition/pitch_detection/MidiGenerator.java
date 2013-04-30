@@ -66,11 +66,11 @@ public class MidiGenerator {
 		Pair<Integer[],Long[]> analysedAudio = new Pair<Integer[],Long[]>();
 		
 		double readVal = audio_stream.readDouble();
-		while(readVal > .00001){
+		while(readVal+1 > .00001){
 			if(audio[0] < .00001){
 				start = 0;
 			}
-			for(int i=slide;i<audio.length && readVal > .00001;i++){
+			for(int i=slide;i<audio.length && readVal+1 > .00001;i++){
 				audio[i] = readVal;
 				readVal = audio_stream.readDouble();
 			}
