@@ -9,6 +9,8 @@ import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
 import java.nio.DoubleBuffer;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MidiGenerator {
@@ -43,8 +45,8 @@ public class MidiGenerator {
 	}
 	
 
-	public MidiFile generateMidi(DataInputStream audio_stream, long sampleRate) throws IOException {
-		return generateMidi(audio_stream,sampleRate,DEFAULT_CLIP_RATE);
+	public MidiFile generateMidi(File f, long sampleRate) throws IOException {
+		return generateMidi(f,sampleRate,DEFAULT_CLIP_RATE);
 	}
 	
 	/**
@@ -56,7 +58,7 @@ public class MidiGenerator {
 	 * @return
 	 * @throws IOException 
 	 */
-	public MidiFile generateMidi(DataInputStream audio_stream, long sampleRate, int clipRate) throws IOException{
+	public MidiFile generateMidi(File f, long sampleRate, int clipRate) throws IOException{
 		ArrayList<Integer> midiNums = new ArrayList<Integer>();
 		ArrayList<Long> durations = new ArrayList<Long>();
 		double[] audio = new double[16384];
@@ -66,6 +68,7 @@ public class MidiGenerator {
 		Pair<Integer[],Long[]> analysedAudio = new Pair<Integer[],Long[]>();
 
 		boolean first = true;
+        DataInputStream audio_stream = new DataInputStream((new FileInputStream(f)));
 		try{
 			while(true){
 				if(first){
@@ -90,6 +93,7 @@ public class MidiGenerator {
 			
 		}catch(Exception e){
 		}
+		audio_stream.close();
 
 
 		

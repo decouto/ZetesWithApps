@@ -66,9 +66,8 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
         MidiFile track = null;
         try {
             // Read file into byte array
-            DataInputStream dis = new DataInputStream((new FileInputStream(audio_file)));
-            track = midi_generator.generateMidi(dis, 44100);
-            dis.close();
+
+            track = midi_generator.generateMidi(audio_file, 44100);
             
         } catch (IOException e) {
             e.printStackTrace();
