@@ -86,7 +86,7 @@ public class ProjectOverviewActivity extends SherlockActivity {
                     // Ready file resource
                     String date_created = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date());
                     long media_id = db.addMedia(project_id, date_created);
-                    File f = new File(projectModel.getProjectDir(), media_id + ".jpg");
+                    File f = new File(projectModel.getProjectDir(), (int) media_id + ".jpg");
                     Log.d("MediaCapture", "URI: " + f.getAbsolutePath());
                     // Launch camera intent
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
