@@ -14,7 +14,8 @@ public class PlotTones {
     
     // Values to tweak
     private static int WINDOW_SIZE = 4096;
-    private static int SLIDE = 2048;
+    private static int SLIDE = 1024;
+    private static int WINDOW_SIZE_FACTOR = 4;
     private static int BINS = 12;
     
     // Logs
@@ -57,7 +58,7 @@ public class PlotTones {
 		//Iterating along the input Audio calculate the prominent frequency in a window centered on every sample
 		//Move the window over slide units every time
 		for(int i=0; i<numWindows; i++){
-			window(windowedAudio,audio,i*slide + windowSize/2);
+			window(windowedAudio,audio,i*slide + windowSize/WINDOW_SIZE_FACTOR);
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
 		}
 		if (LOG_INPUT_FREQS) Log.v(TAG_PRE,Arrays.toString(inpFreqs)); // TODO
