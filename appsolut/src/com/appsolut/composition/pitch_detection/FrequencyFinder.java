@@ -10,15 +10,14 @@ import java.util.Arrays;
 import android.util.Log;  
 
 
-public class PlotTones {
-
-   // Logs
-    private static final boolean LOG_INPUT_FREQS = true;
-    private static final boolean LOG_MAX_INDS = false;
-    private static final boolean LOG_PROM_FREQS = false;
-    private static final boolean LOG_FREQ_GRAPH = false;
+public class FrequencyFinder {
+	private long sampleRate;
+	private int clipRate;
     
-    
+    public FrequencyFinder(long _sampleRate, int _clipRate){
+    	sampleRate = _sampleRate;
+    	clipRate = _clipRate;
+    }
 	/**
 	 * Takes audio and finds the most prominent frequency for each part.
 	 * 
@@ -27,14 +26,12 @@ public class PlotTones {
 	 * @param clipRate | The number of frequencies to produce per second
 	 * @return
 	 */
-	private static final String TAG_PRE = "Pre-smoothing";
-	
-	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
+	public int[] findFrequencies(double[] audio){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
 		int WINDOW_SIZE = 4096;
 		int SLIDE = 2048;
 		int numClips = (int) (clipRate*lenAudioInSecs);
-		int[] inpFreqs = audioToAllFreqs(audio,sampleRate,WINDOW_SIZE,SLIDE);
+		int[] inpFreqs = audioToAllFreqs(audio,WINDOW_SIZE,SLIDE);
 		return aveFreqs(inpFreqs, numClips);
 	}
 	
@@ -47,7 +44,7 @@ public class PlotTones {
 	 * @param slide | The amount the window is moved over every iteration
 	 * @return
 	 */
-	static int[] audioToAllFreqs(double[] audio,long sampleRate, int windowSize, int slide){
+	private int[] audioToAllFreqs(double[] audio,int windowSize, int slide){
 		int numWindows = audio.length/slide; 
 		int[] inpFreqs = new int[numWindows];
 		double[] windowedAudio = new double[windowSize];
@@ -57,7 +54,6 @@ public class PlotTones {
 			window(windowedAudio,audio,i*slide + windowSize);
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
 		}
-		if (LOG_INPUT_FREQS) Log.v(TAG_PRE,Arrays.toString(inpFreqs)); // TODO
 		smoothFreqs(inpFreqs);
 		return inpFreqs;
 	}
@@ -67,7 +63,7 @@ public class PlotTones {
 	 * @modifies inp
 	 * @param inp the array of frequencies to be smoothed
 	 */
-	private static void smoothFreqs(int[] inp){
+	private void smoothFreqs(int[] inp){
 		//TODO: Implement me!
 	}
 	
@@ -78,7 +74,7 @@ public class PlotTones {
 	 * @param numClips
 	 * @return
 	 */
-	static int[] aveFreqs(int[] inpFreqs, int numClips){
+	private int[] aveFreqs(int[] inpFreqs, int numClips){
 		int lenClipInSamples = inpFreqs.length/numClips;
 		//Average the values in inpFreqs to get the correct number of Pitches
 		int[] pitches = new int[numClips];
@@ -104,7 +100,7 @@ public class PlotTones {
 	 * @param width
 	 * @modifies out 
 	 */
-	static void window(double[] out, double[] inp, int center){
+	private void window(double[] out, double[] inp, int center){
 		int width = out.length;
 		int stInd = center - width/2;
 		int stopInd = center + width/2;
@@ -130,7 +126,7 @@ public class PlotTones {
 	 * @param noiseFreqs
 	 * @return an array of frequencies sorted by prominence in descending order
 	 */
-	static int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
+	private int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
 		int BINS = (int) Math.round(Math.pow(2,14));
 		
 		double[] working_wave = new double[2*inputWaveform.length];
@@ -139,7 +135,7 @@ public class PlotTones {
 			working_wave[i] = inputWaveform[i];
 		}
 		
-		normalArray(working_wave);//normalizes the working wave by subtracting its average value from every element
+		normalizeArray(working_wave);//normalizes the working wave by subtracting its average value from every element
 		DoubleFFT_1D fftBase = new DoubleFFT_1D(BINS);
 
 		fftBase.realForwardFull(working_wave);
@@ -154,8 +150,7 @@ public class PlotTones {
 		int[] promFreqs = 	new int[promInds.length];//Converts these indexes into frequencies
 		for(int i=0; i<promInds.length;i++){
 			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(BINS*2.0));
-		if (LOG_PROM_FREQS) Log.v("ProminentFreqs",Arrays.toString(promFreqs)); // TODO
-		if (LOG_FREQ_GRAPH) Log.v("FreqGraph",Arrays.toString(working_wave)); // TODO
+		
 		}
 		
 		return promFreqs;
@@ -170,7 +165,7 @@ public class PlotTones {
 	 * @param numberBins
 	 * @return
 	 */
-	static double[] getBinArray(double[] inpArray, int numberBins){
+	private double[] getBinArray(double[] inpArray, int numberBins){
 		double[] outArray = new double[numberBins];
 		for(int i=0;i<inpArray.length;i++){
 			int bin = (int)(i*(numberBins+0.0)/inpArray.length);
@@ -186,14 +181,13 @@ public class PlotTones {
 	 * @param numMaxes
 	 * @return
 	 */
-	static int[] getIndsWithMaxVals(double[] inpArray, int numMaxes){
+	private int[] getIndsWithMaxVals(double[] inpArray, int numMaxes){
 		int[] outArray = new int[numMaxes];
 		double[] prominence = new double[numMaxes];
 		for(int i=0;i<numMaxes;i++){
 			prominence[i] = -1;
 			outArray[i] = -1;
 		}
-		double final_el = 0;  // TODO remove this
 		for(int i=0;i<inpArray.length;i++){
 			double el = inpArray[i];
 			double comp = prominence[prominence.length-1];
@@ -211,9 +205,7 @@ public class PlotTones {
 					
 				}//end j for loop
 			}
-			final_el = el;   // TODO remove this
 		}// end i for loop
-		if (LOG_MAX_INDS) Log.v("MaxInds", ""+final_el);  // TODO remove this
 		return outArray;
 	}
 	
@@ -223,7 +215,7 @@ public class PlotTones {
 	 * @modifies input array
 	 * @param inpArray
 	 */
-	static void normalArray(double[] inp){
+	private void normalizeArray(double[] inp){
 		//Get the average value of the binned input wave (working_wave) then use it to normalize the working wave
 		double arrayAve = 0;
 		for(double d: inp){

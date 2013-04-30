@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class AudioAnalyser {
 	int bpm;
 	int ppq;
-	static long sampleRate;
-	static int clipRate;
+	long sampleRate;
+	int clipRate;
+	FrequencyFinder ff;
 	private final static double[] FREQS_MIDI_OCT_0 = {	261.6255653006,
 														277.1826309769,
 														293.6647679174,
@@ -25,11 +26,13 @@ public class AudioAnalyser {
 		ppq = _ppq;
 		sampleRate = _sampleRate;
 		clipRate = _clipRate;
+		ff = new FrequencyFinder(sampleRate, clipRate);
 	}
 	
 	public Pair<Integer[],Long[]> analyse(double[] audio){
 		return getMidiNumsWithTicks(audioToMidiNums(audio));
 	}
+	
 	/**
 	 * Takes an array of midi numbers without explicitly specified durations and explicitly defines their durations.
 	 * 
@@ -71,10 +74,10 @@ public class AudioAnalyser {
 	 * @param clipRate The number of frequencies found in the audio per second
 	 * @return an array of midi numbers
 	 */
-	private static int[] audioToMidiNums(double[] audio){
+	private int[] audioToMidiNums(double[] audio){
 		return 	snapIntervals(
 				freqsToRawIntervals(
-				PlotTones.audioToFreqs(audio, sampleRate, clipRate)));
+				ff.findFrequencies(audio)));
 	}
 	
 	/**
@@ -83,10 +86,9 @@ public class AudioAnalyser {
 	 * @param freqs 
 	 * @return The first frequency and an array of intervals. The first note itself is included in the array of intervals as 0.
 	 */
-	private static Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
+	private Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
 		int baseFreq = freqs[0];
 		double[] intervals = new double[freqs.length];
-		//Log.v(TAG, Arrays.toString(freqs));
 		for(int i=0; i<freqs.length; i++){
 			intervals[i] = 12*Math.log(1.0*freqs[i]/baseFreq)/Math.log(2);//The number of half steps from baseFreq
 		}
@@ -99,7 +101,7 @@ public class AudioAnalyser {
 	 * @param inp
 	 * @return an array of midi numbers
 	 */
-	private static int[] snapIntervals(Pair<Integer,double[]> inp){
+	private int[] snapIntervals(Pair<Integer,double[]> inp){
 		int baseFreq = inp.left;
 		double[] intervals = inp.right;
 		int octaveNum = (int) Math.round(Math.log(baseFreq/FREQS_MIDI_OCT_0[9])/Math.log(2));
@@ -123,12 +125,13 @@ public class AudioAnalyser {
 		smoothMidiNums(midiNums);
 		return midiNums;
 	}
+	
 	/**
 	 * Uses a triangular average to smooth out the midi numbers
 	 * @param inp
 	 * @modifies inp
 	 */
-	private static void smoothMidiNums(int[] inp){
+	private void smoothMidiNums(int[] inp){
 		int[] smoothedInp = new int[inp.length];
 		for(int i=3; i<inp.length-3; i++){
 			smoothedInp[i] = (4*inp[i] + 3*(inp[i-1]+inp[i+1]) + 2*(inp[i-2]+inp[i+2]) + 1*(inp[i-3]+inp[i+3]))/16;
