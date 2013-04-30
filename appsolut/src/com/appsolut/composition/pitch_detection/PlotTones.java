@@ -137,11 +137,18 @@ public class PlotTones {
 	static int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
 		int numberBins = (int) Math.round(Math.pow(2,BINS));
 		if(numberBins > inputWaveform.length) numberBins = inputWaveform.length;
-		double [] working_wave = getNormalArray(inputWaveform);//normalize the working wave by subtracting its average value from every element
+		double[] working_wave = new double[2*inputWaveform.length];
+		for(int i=0;i<inputWaveform.length;i++){
+			working_wave[i] = inputWaveform[i];
+		}
+		working_wave = getNormalArray(working_wave);//normalize the working wave by subtracting its average value from every element
 		DoubleFFT_1D fftBase = new DoubleFFT_1D(numberBins);
-		fftBase.realForward(working_wave);
-		//TODO: apply a window function?
-		int[] promInds 	=   getIndsWithMaxVals(working_wave,numTones);
+		double[] magnitudes = new double[inputWaveform.length];
+		fftBase.realForwardFull(working_wave);
+		for(int i=0;i<magnitudes.length;i++){
+			magnitudes[i] = working_wave[2*i]*working_wave[2*i] + working_wave[2*i+1]*working_wave[2*i+1];
+		}
+		int[] promInds 	=   getIndsWithMaxVals(magnitudes,numTones);
 		int[] promFreqs = 	new int[promInds.length];
 		for(int i=0; i<promInds.length;i++){
 			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(numberBins*2.0));
