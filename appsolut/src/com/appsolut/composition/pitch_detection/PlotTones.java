@@ -5,6 +5,9 @@
 package com.appsolut.composition.pitch_detection;
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
+import java.util.Arrays;
+
+import android.util.Log;  
 
 
 public class PlotTones {
@@ -16,6 +19,8 @@ public class PlotTones {
 	 * @param clipRate | The number of frequencies to produce per second
 	 * @return
 	 */
+	private static final String TAG = "DCisMasterbating";
+	
 	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
 		int numClips = (int) (clipRate*lenAudioInSecs);
@@ -126,6 +131,7 @@ public class PlotTones {
 		int[] promFreqs = 	new int[promInds.length];
 		for(int i=0; i<promInds.length;i++){
 			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(numberBins*2.0));
+		Log.v(TAG,Arrays.toString(promFreqs));
 		}
 		return promFreqs;
 	}// end run method body
