@@ -31,8 +31,8 @@ public class PlotTones {
 	
 	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
-		int WINDOW_SIZE = 16384;
-		int SLIDE = 4096;
+		int WINDOW_SIZE = 4096;
+		int SLIDE = 2048;
 		int numClips = (int) (clipRate*lenAudioInSecs);
 		int[] inpFreqs = audioToAllFreqs(audio,sampleRate,WINDOW_SIZE,SLIDE);
 		return aveFreqs(inpFreqs, numClips);
@@ -63,7 +63,7 @@ public class PlotTones {
 	}
 	
 	/**
-	 * Modifies the input array to make it smooter
+	 * Modifies the input array to make it smoother
 	 * @modifies inp
 	 * @param inp the array of frequencies to be smoothed
 	 */
