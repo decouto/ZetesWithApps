@@ -11,7 +11,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Environment;
 
 import com.appsolut.composition.ProjectOverviewActivity;
 import com.appsolut.composition.pitch_detection.WaveToMidi;
@@ -23,6 +22,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     private Context mContext;
     private TaskCallback mCallback;
     private long project_id;
+    private ProjectModel model;
     
     // Dialog
     ProgressDialog pd_conversion;
@@ -39,20 +39,13 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
         this.mContext = context.getApplicationContext();
         this.mCallback = callback;
         this.project_id = project_id;
+        model = new ProjectModel(mContext, project_id);
 
         pd_conversion = new ProgressDialog(context);
         
         // MIDI generation
-        midi_generator = new WaveToMidi(120);   // TODO import bpm
-        dir = new File( Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator
-                + "SongScribe"
-                + File.separator
-                + "projects"
-                + File.separator
-                + project_id
-                + File.separator);
-        dir.mkdirs();
+        midi_generator = new WaveToMidi(model.getBpm());
+        dir = model.getProjectDir();
     }
     
     @Override

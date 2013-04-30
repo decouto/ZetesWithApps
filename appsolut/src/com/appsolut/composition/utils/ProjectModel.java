@@ -1,8 +1,10 @@
 package com.appsolut.composition.utils;
 
+import java.io.File;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.os.Environment;
 
 public class ProjectModel {
     
@@ -71,6 +73,21 @@ public class ProjectModel {
     
     public boolean isChecked() {
         return is_checked;
+    }
+    
+    public File getProjectDir() {
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+        + File.separator
+        + "SongScribe"
+        + File.separator
+        + "projects"
+        + File.separator
+        + project_id + ".ss"
+        + File.separator);
+        
+        directory.mkdirs();
+        
+        return directory;
     }
 
 }
