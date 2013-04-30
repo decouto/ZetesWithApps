@@ -18,10 +18,10 @@ public class PlotTones {
     private static int BINS = 12;
     
     // Logs
-    private static boolean LOG_INPUT_FREQS = false;
+    private static boolean LOG_INPUT_FREQS = true;
     private static boolean LOG_MAX_INDS = false;
     private static boolean LOG_PROM_FREQS = false;
-    private static boolean LOG_FREQ_GRAPH = true;
+    private static boolean LOG_FREQ_GRAPH = false;
     
     
 	/**
