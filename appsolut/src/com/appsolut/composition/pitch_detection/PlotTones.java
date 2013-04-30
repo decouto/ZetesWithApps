@@ -49,6 +49,7 @@ public class PlotTones {
 			window(windowedAudio,audio,i*slide + windowSize/2);
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
 		}
+		Log.v(TAG,Arrays.toString(inpFreqs));
 		smoothFreqs(inpFreqs);
 		return inpFreqs;
 	}
@@ -131,7 +132,7 @@ public class PlotTones {
 		int[] promFreqs = 	new int[promInds.length];
 		for(int i=0; i<promInds.length;i++){
 			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(numberBins*2.0));
-		Log.v(TAG,Arrays.toString(promFreqs));
+		//Log.v(TAG,Arrays.toString(promFreqs));
 		}
 		return promFreqs;
 	}// end run method body
