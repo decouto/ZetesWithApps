@@ -25,7 +25,7 @@ public class WaveToMidi {
 																440.0000000000,
 																466.1637615181,
 																493.8833012561};
-	private static final String TAG = "HerbleGerble";
+	private static final String TAG = "FreqList";//Do not put useless names on things
 	
 
 	private final static int DEFAULT_CLIP_RATE = 5;//Number of frequencies/second
@@ -172,9 +172,22 @@ public class WaveToMidi {
 		closestTone = closestTone + 60 + octaveNum*12;
 		int[] midiNums = new int[intervals.length];
 		for(int i=0; i<intervals.length; i++){
-				midiNums[i] = (int) Math.round(intervals[i])+ closestTone;
+				midiNums[i] = (int) Math.round(intervals[i]) + closestTone;
 		}
+		smoothMidiNums(midiNums);
 		return midiNums;
+	}
+	
+	private static void smoothMidiNums(int[] inp){
+		int[] smoothedInp = new int[inp.length];
+		for(int i=2; i<inp.length-2; i++){
+			smoothedInp[i] = (3*inp[i] + 2*(inp[i-1]+inp[i+1]) + 1*(inp[i-2]+inp[i+2]))/9;
+		}
+		smoothedInp[0] = inp[0];
+		smoothedInp[1] = inp[1];
+		smoothedInp[inp.length-1] = inp[inp.length-1];
+		smoothedInp[inp.length-2] = inp[inp.length-2];
+		inp = smoothedInp;
 	}
 	
 
