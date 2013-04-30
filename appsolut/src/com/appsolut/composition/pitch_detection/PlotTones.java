@@ -20,7 +20,8 @@ public class PlotTones {
     // Logs
     private static boolean LOG_INPUT_FREQS = false;
     private static boolean LOG_MAX_INDS = false;
-    private static boolean LOG_PROM_FREQS = true;
+    private static boolean LOG_PROM_FREQS = false;
+    private static boolean LOG_FREQ_GRAPH = true;
     
     
 	/**
@@ -144,6 +145,7 @@ public class PlotTones {
 		for(int i=0; i<promInds.length;i++){
 			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(numberBins*2.0));
 		if (LOG_PROM_FREQS) Log.v("ProminentFreqs",Arrays.toString(promFreqs)); // TODO
+		if (LOG_FREQ_GRAPH) Log.v("FreqGraph",Arrays.toString(working_wave)); // TODO
 		}
 		return promFreqs;
 	}// end run method body
