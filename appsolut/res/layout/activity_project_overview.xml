@@ -1,20 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+        android:background="@color/white">
    
     <!-- Project Name -->
+
     <TextView
         android:id="@+id/tv_project_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:text="@string/project_name"
+        android:textColor="@color/neutral_two"
         android:textColor="@color/black"
         android:textSize="30sp"
-        android:text="@string/project_name" />
+        android:typeface="monospace" />
    
-    <!-- Project BMP -->
+    <!-- Project BPM -->
     <TextView android:id="@+id/tv_project_bpm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +27,9 @@
         android:layout_marginTop="20dip"
         android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:text="@string/new_project_bpm" />
+        android:text="@string/new_project_bpm"
+               android:typeface="monospace"
+            android:textColor="@color/black" />
     
     <EditText android:id="@+id/et_project_bpm"
         android:layout_width="180dip"
@@ -35,7 +41,9 @@
         android:layout_marginLeft="10dip"
         android:gravity="center"
         android:inputType="number"
-        android:hint="@string/new_project_bpm" />
+        android:hint="@string/new_project_bpm" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
     
     <!-- Project Description -->
     <TextView android:id="@+id/tv_project_description"
@@ -46,7 +54,9 @@
         android:layout_marginTop="20dip"
         android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:text="@string/new_project_description" />
+        android:text="@string/new_project_description" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
     
     <EditText android:id="@+id/et_project_description"
         android:layout_width="fill_parent"
@@ -59,7 +69,9 @@
         android:singleLine="false"
         android:lines="3"
         android:gravity="top"
-        android:hint="@string/new_project_description" />
+        android:hint="@string/new_project_description" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
     
     <!-- Playback Controls -->
 	<TextView android:id="@+id/tv_project_audio"
@@ -70,7 +82,9 @@
         android:layout_marginTop="10dip"
         android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:text="@string/project_audio" />
+        android:text="@string/project_audio" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
 	
 	<Button android:id="@+id/btn_share_audio"
 	    android:layout_width="wrap_content"
@@ -79,7 +93,9 @@
 	    android:layout_toLeftOf="@+id/fl_playback_btn"
 	    android:layout_marginTop="10dp"
 	    android:layout_marginRight="10dp"
-	    android:text="@string/project_share" />
+	    android:text="@string/project_share" 
+	                android:typeface="monospace"
+            android:textColor="@color/black"/>
 	
 	<FrameLayout android:id="@+id/fl_playback_btn"
 	    android:layout_width="wrap_content"
@@ -87,7 +103,9 @@
 	    android:layout_below="@+id/et_project_description"
 	    android:layout_alignParentRight="true"
         android:layout_marginTop="10dip"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
 	
 	<!-- Playback Controls -->
 	<TextView android:id="@+id/tv_project_midi"
@@ -98,7 +116,9 @@
         android:layout_marginTop="10dip"
         android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:text="@string/project_midi" />
+        android:text="@string/project_midi" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
 	
 	<Button android:id="@+id/btn_share_midi"
 	    android:layout_width="wrap_content"
@@ -107,7 +127,9 @@
 	    android:layout_toLeftOf="@+id/btn_play_midi"
 	    android:layout_marginTop="10dp"
 	    android:layout_marginRight="10dp"
-	    android:text="@string/project_share" />
+	    android:text="@string/project_share" 
+	                android:typeface="monospace"
+            android:textColor="@color/black"/>
 	
 	<Button android:id="@+id/btn_play_midi"
 	    android:layout_width="wrap_content"
@@ -116,7 +138,9 @@
 	    android:layout_alignParentRight="true"
 	    android:layout_marginTop="10dp"
 	    android:layout_marginRight="10dp"
-	    android:text="@string/project_play" />
+	    android:text="@string/project_play" 
+	                android:typeface="monospace"
+            android:textColor="@color/black"/>
 	
 	<!-- Project Description -->
     <TextView android:id="@+id/tv_project_media"
@@ -127,7 +151,9 @@
         android:layout_marginTop="20dip"
         android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:text="@string/project_media" />
+        android:text="@string/project_media" 
+                    android:typeface="monospace"
+            android:textColor="@color/black"/>
     
     <LinearLayout android:id="@+id/ll_project_media"
         android:layout_width="fill_parent"

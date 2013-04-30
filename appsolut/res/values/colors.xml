@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="white">#FFFFFF</color>
-	<color name="black">#000000</color>
+
 	<color name="red">#FF0000</color>
 	<color name="dark_grey">#333333</color>
 	<color name="light_grey">#CCCCCC</color>
+	<!-- actual colors below this line -->
+	<color name="neutral_one">#B89A7B</color>
+	<color name="neutral_two">#9BBAAC</color>
+	<color name="accent_one">#F2D649</color>
+	<color name="accent_two">#D95D50</color>
+	<color name="white">#DBDBDB</color>
+	<color name="black">#363636</color>
 </resources>

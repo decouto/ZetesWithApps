@@ -105,10 +105,7 @@ public class WaveToMidi {
 				dur++;
 			}
 		}
-//		for(int m: midiNums){
-//			newMidiNums.add(m);
-//			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
-//		}
+
 		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
 		Long[] outTicksPer = new Long[0];
