@@ -24,7 +24,7 @@ public class PlotTones {
 	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
 		int numClips = (int) (clipRate*lenAudioInSecs);
-		int WINDOW_SIZE = 2756;
+		int WINDOW_SIZE = 4096;
 		int SLIDE = WINDOW_SIZE / 2;
 		int[] inpFreqs = audioToAllFreqs(audio,sampleRate,WINDOW_SIZE,SLIDE);
 		return aveFreqs(inpFreqs, numClips);
@@ -123,7 +123,7 @@ public class PlotTones {
 	 * @return an array of frequencies sorted by prominence in descending order
 	 */
 	static int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
-		int numberBins = (int) Math.round(Math.pow(2,11));
+		int numberBins = (int) Math.round(Math.pow(2,12));
 		if(numberBins > inputWaveform.length) numberBins = inputWaveform.length;
 		double [] working_wave = getNormalArray(inputWaveform);//normalize the working wave by subtracting its average value from every element
 		DoubleFFT_1D fftBase = new DoubleFFT_1D(numberBins);

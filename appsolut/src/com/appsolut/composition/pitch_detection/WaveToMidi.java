@@ -1,15 +1,11 @@
 package com.appsolut.composition.pitch_detection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.lang.String;
 
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
-
-import android.util.Log;  
 
 
 public class WaveToMidi {
