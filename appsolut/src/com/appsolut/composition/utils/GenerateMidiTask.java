@@ -13,7 +13,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.appsolut.composition.ProjectOverviewActivity;
-import com.appsolut.composition.pitch_detection.WaveToMidi;
+import com.appsolut.composition.pitch_detection.MidiGenerator;
 import com.leff.midi.MidiFile;
 
 public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
@@ -28,7 +28,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     ProgressDialog pd_conversion;
     
     // MIDI generation
-    private WaveToMidi midi_generator;
+    private MidiGenerator midi_generator;
     
     // File descriptors
     private File dir;
@@ -44,7 +44,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
         pd_conversion = new ProgressDialog(context);
         
         // MIDI generation
-        midi_generator = new WaveToMidi(model.getBpm());
+        midi_generator = new MidiGenerator(model.getBpm());
         dir = model.getProjectDir();
     }
     
@@ -66,20 +66,10 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
         MidiFile track = null;
         try {
             // Read file into byte array
-            byte [] fileData = new byte[(int) audio_file.length()];
             DataInputStream dis = new DataInputStream((new FileInputStream(audio_file)));
-            dis.readFully(fileData);
+            track = midi_generator.generateMidi(dis, 44100);
             dis.close();
             
-            // Convert byte array into double array
-            double[] data = new double[(int) Math.floor(audio_file.length() / 2)];
-            ByteBuffer bb = ByteBuffer.wrap(fileData);
-            for (int i = 0; i < data.length; i++) {
-                data[i] = (double) bb.getShort();
-            }
-            
-            // Convert to MIDI file
-            track = midi_generator.audioToMidiFile(data, 44100);
         } catch (IOException e) {
             e.printStackTrace();
         }

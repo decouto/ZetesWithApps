@@ -2,81 +2,35 @@ package com.appsolut.composition.pitch_detection;
 
 import java.util.ArrayList;
 
-import com.leff.midi.MidiFile;
-import com.leff.midi.MidiTrack;
-import com.leff.midi.event.meta.Tempo;
-import com.leff.midi.event.meta.TimeSignature;
-
-
-public class WaveToMidi {
+public class AudioAnalyser {
+	int bpm;
+	int ppq;
+	long sampleRate;
+	int clipRate;
+	FrequencyFinder ff;
 	private final static double[] FREQS_MIDI_OCT_0 = {	261.6255653006,
-																277.1826309769,
-																293.6647679174,
-																311.1269837221,
-											
-																329.6275569129,
-																349.2282314330,
-																369.9944227116,
-																391.9954359817,
-																415.3046975799,
-																440.0000000000,
-																466.1637615181,
-																493.8833012561};
-	private static final String TAG = "FreqList";//Do not put useless names on things
+														277.1826309769,
+														293.6647679174,
+														311.1269837221,
+														329.6275569129,
+														349.2282314330,
+														369.9944227116,
+														391.9954359817,
+														415.3046975799,
+														440.0000000000,
+														466.1637615181,
+														493.8833012561};
 	
-
-	private final static int DEFAULT_CLIP_RATE = 5;//Number of frequencies/second
-	private int bpm;
-	private int ppq = 192;
-	private static final int OFF_VAL = -1;
-
-	// MIDI resources
-	private MidiFile midiFile;
-	private MidiTrack tempoTrack;
-	private MidiTrack noteTrack;
-	
-	public WaveToMidi(int _bpm) {
-	    // MIDI Instantiation
-	    midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
-	    tempoTrack = new MidiTrack();
-	    noteTrack = new MidiTrack();
-	    bpm=_bpm;
-	    // Tempo track
-	    TimeSignature ts = new TimeSignature();
-	    ts.setTimeSignature(4, 4, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
-	    Tempo t = new Tempo();
-	    t.setBpm(_bpm);
-	    tempoTrack.insertEvent(ts);
-	    tempoTrack.insertEvent(t);
-	    midiFile.addTrack(tempoTrack);
+	public AudioAnalyser(int _bpm, int _ppq, long _sampleRate, int _clipRate){
+		bpm = _bpm;
+		ppq = _ppq;
+		sampleRate = _sampleRate;
+		clipRate = _clipRate;
+		ff = new FrequencyFinder(sampleRate, clipRate);
 	}
 	
-	public MidiFile audioToMidiFile(double[] audio, long sampleRate) {
-		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
-	}
-	
-	/**
-	 * Taking the output from getMidiNumsWithTicks schedules midi events and produces a midi file
-	 * 
-	 * @param audio The audio to be converted to midi
-	 * @param sampleRate The sample rate the audio was recorded at
-	 * @param clipRate The number of frequencies found in the audio per second
-	 * @return
-	 */
-	public MidiFile audioToMidiFile(double[] audio, long sampleRate, int clipRate){
-		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate),clipRate);
-		long onTick = 0;
-		int midiNum = OFF_VAL;
-		for(int i=0;i<midiNums.left.length;i++){
-			midiNum = midiNums.left[i];
-			if(midiNum != OFF_VAL){
-				noteTrack.insertNote(0, midiNum, 127, onTick,midiNums.right[i]);
-			}
-			onTick += midiNums.right[i];
-		}
-		midiFile.addTrack(noteTrack);
-		return midiFile;
-		
+	public Pair<Integer[],Long[]> analyseAudio(double[] audio){
+		return getMidiNumsWithTicks(audioToMidiNums(audio));
 	}
 	
 	/**
@@ -86,7 +40,7 @@ public class WaveToMidi {
 	 * @param clipRate the number of frequencies found per second
 	 * @return A pair of arrays representing midi numbers and their durations in ticks
 	 */
-	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums,int clipRate){
+	private Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums){
 		int calibration_mult = 10;//This is only here because I don't know what the formula for ticks/occurrence should be– DCD
 		long TICKS_PER_OCCURRENCE = calibration_mult*bpm*ppq/(60*clipRate);
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
@@ -120,10 +74,10 @@ public class WaveToMidi {
 	 * @param clipRate The number of frequencies found in the audio per second
 	 * @return an array of midi numbers
 	 */
-	static int[] audioToMidiNums(double[] audio, long sampleRate, int clipRate){
+	private int[] audioToMidiNums(double[] audio){
 		return 	snapIntervals(
 				freqsToRawIntervals(
-				PlotTones.audioToFreqs(audio, sampleRate, clipRate)));
+				ff.findFrequencies(audio)));
 	}
 	
 	/**
@@ -132,10 +86,9 @@ public class WaveToMidi {
 	 * @param freqs 
 	 * @return The first frequency and an array of intervals. The first note itself is included in the array of intervals as 0.
 	 */
-	static Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
+	private Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
 		int baseFreq = freqs[0];
 		double[] intervals = new double[freqs.length];
-		//Log.v(TAG, Arrays.toString(freqs));
 		for(int i=0; i<freqs.length; i++){
 			intervals[i] = 12*Math.log(1.0*freqs[i]/baseFreq)/Math.log(2);//The number of half steps from baseFreq
 		}
@@ -148,7 +101,7 @@ public class WaveToMidi {
 	 * @param inp
 	 * @return an array of midi numbers
 	 */
-	static int[] snapIntervals(Pair<Integer,double[]> inp){
+	private int[] snapIntervals(Pair<Integer,double[]> inp){
 		int baseFreq = inp.left;
 		double[] intervals = inp.right;
 		int octaveNum = (int) Math.round(Math.log(baseFreq/FREQS_MIDI_OCT_0[9])/Math.log(2));
@@ -172,12 +125,13 @@ public class WaveToMidi {
 		smoothMidiNums(midiNums);
 		return midiNums;
 	}
+	
 	/**
 	 * Uses a triangular average to smooth out the midi numbers
 	 * @param inp
 	 * @modifies inp
 	 */
-	private static void smoothMidiNums(int[] inp){
+	private void smoothMidiNums(int[] inp){
 		int[] smoothedInp = new int[inp.length];
 		for(int i=3; i<inp.length-3; i++){
 			smoothedInp[i] = (4*inp[i] + 3*(inp[i-1]+inp[i+1]) + 2*(inp[i-2]+inp[i+2]) + 1*(inp[i-3]+inp[i+3]))/16;
@@ -190,6 +144,4 @@ public class WaveToMidi {
 		smoothedInp[inp.length-3] = inp[inp.length-3];
 		inp = smoothedInp;
 	}
-	
-
 }
