@@ -13,10 +13,10 @@ import android.util.Log;
 public class PlotTones {
     
     // Values to tweak
-    private static int WINDOW_SIZE = 4096;
-    private static int SLIDE = 1024;
-    private static int WINDOW_SIZE_FACTOR = 4;
-    private static int BINS = 12;
+    private static int WINDOW_SIZE = 16384;
+    private static int SLIDE = 4096;
+    private static int WINDOW_SIZE_FACTOR = 1;
+    private static int BINS = 14;
     
     // Logs
     private static boolean LOG_INPUT_FREQS = true;
