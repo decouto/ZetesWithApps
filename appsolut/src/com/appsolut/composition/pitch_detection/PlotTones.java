@@ -17,6 +17,10 @@ public class PlotTones {
     private static int SLIDE = 2048;
     private static int BINS = 12;
     
+    // Logs
+    private static boolean LOG_INPUT_FREQS = false;
+    private static boolean LOG_MAX_INDS = true;
+    
     
 	/**
 	 * Takes audio and finds the most prominent frequency for each part.
@@ -54,7 +58,7 @@ public class PlotTones {
 			window(windowedAudio,audio,i*slide + windowSize/2);
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
 		}
-		Log.v(TAG_PRE,Arrays.toString(inpFreqs));
+		if (LOG_INPUT_FREQS) Log.v(TAG_PRE,Arrays.toString(inpFreqs)); // TODO
 		smoothFreqs(inpFreqs);
 		return inpFreqs;
 	}
@@ -175,6 +179,7 @@ public class PlotTones {
 			prominence[i] = -1;
 			outArray[i] = -1;
 		}
+		double final_el = 0;  // TODO remove this
 		for(int i=0;i<inpArray.length;i++){
 			double el = inpArray[i];
 			double comp = prominence[prominence.length-1];
@@ -182,8 +187,8 @@ public class PlotTones {
 				for(int j=0;j<prominence.length;j++){
 					if(el>prominence[j]){//insert the element preserving the lists sort
 						for(int k=prominence.length-1; k>j; k--){
-							prominence[k]= prominence[k-1];
-							outArray[k]= outArray[k-1];	
+							prominence[k] = prominence[k-1];
+							outArray[k] = outArray[k-1];	
 						}
 						prominence[j] = el;
 						outArray[j] = i;
@@ -192,7 +197,9 @@ public class PlotTones {
 					
 				}//end j for loop
 			}
+			final_el = el;   // TODO remove this
 		}// end i for loop
+		if (LOG_MAX_INDS) Log.v("MaxInds", ""+final_el);  // TODO remove this
 		return outArray;
 	}
 	
