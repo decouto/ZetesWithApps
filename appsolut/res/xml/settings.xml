@@ -10,11 +10,6 @@
             android:defaultValue="120"
             android:key="prefDefaultBPM" />
         
-        <CheckBoxPreference
-            android:title="Title"
-            android:summary="Summary"
-            android:key="prefPredictKey" />
-        
     </PreferenceCategory>
     
     <PreferenceCategory 
@@ -30,10 +25,17 @@
     
     <PreferenceCategory
         android:title="MIDI Generation Preferences" >
+        
+        <EditTextPreference
+            android:title="MIDI Resolution"
+            android:summary="Smallest note fraction to parse"
+            android:inputType="number"
+            android:defaultValue="8"
+            android:key="prefFftResolution" />
     </PreferenceCategory>
     
-    <PreferenceCategory
+    <!-- <PreferenceCategory
         android:title="MIDI Editor Preferences" >
-    </PreferenceCategory>
+    </PreferenceCategory> -->
     
 </PreferenceScreen>
