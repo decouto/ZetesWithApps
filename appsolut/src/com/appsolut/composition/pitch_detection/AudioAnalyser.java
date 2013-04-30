@@ -132,16 +132,18 @@ public class AudioAnalyser {
 	 * @modifies inp
 	 */
 	private void smoothMidiNums(int[] inp){
-		int[] smoothedInp = new int[inp.length];
-		for(int i=3; i<inp.length-3; i++){
-			smoothedInp[i] = (4*inp[i] + 3*(inp[i-1]+inp[i+1]) + 2*(inp[i-2]+inp[i+2]) + 1*(inp[i-3]+inp[i+3]))/16;
+		if(inp.length >= 3){
+			int[] smoothedInp = new int[inp.length];
+			for(int i=3; i<inp.length-3; i++){
+				smoothedInp[i] = (4*inp[i] + 3*(inp[i-1]+inp[i+1]) + 2*(inp[i-2]+inp[i+2]) + 1*(inp[i-3]+inp[i+3]))/16;
+			}
+			smoothedInp[0] = inp[0];
+			smoothedInp[1] = inp[1];
+			smoothedInp[2] = inp[2];
+			smoothedInp[inp.length-1] = inp[inp.length-1];
+			smoothedInp[inp.length-2] = inp[inp.length-2];
+			smoothedInp[inp.length-3] = inp[inp.length-3];
+			inp = smoothedInp;
 		}
-		smoothedInp[0] = inp[0];
-		smoothedInp[1] = inp[1];
-		smoothedInp[2] = inp[2];
-		smoothedInp[inp.length-1] = inp[inp.length-1];
-		smoothedInp[inp.length-2] = inp[inp.length-2];
-		smoothedInp[inp.length-3] = inp[inp.length-3];
-		inp = smoothedInp;
 	}
 }

@@ -121,21 +121,20 @@ public class FrequencyFinder {
 	 * @param noiseFreqs
 	 * @return an array of frequencies sorted by prominence in descending order
 	 */
-	private int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
-		int BINS = (int) Math.round(Math.pow(2,14));
+	private int[] getProminentFrequencies(double[] inp, long sampleRate, int numTones, double[] noiseFreqs){
+		int N = inp.length;
+		double[] working_wave = new double[2*inp.length];
 		
-		double[] working_wave = new double[2*inputWaveform.length];
-		
-		for(int i=0;i<inputWaveform.length;i++){
-			working_wave[i] = inputWaveform[i];
+		for(int i=0;i<inp.length;i++){
+			working_wave[i] = inp[i];
 		}
 		
 		normalizeArray(working_wave);//normalizes the working wave by subtracting its average value from every element
-		DoubleFFT_1D fftBase = new DoubleFFT_1D(BINS);
+		DoubleFFT_1D fftBase = new DoubleFFT_1D(N);
 
 		fftBase.realForwardFull(working_wave);
 		
-		double[] magnitudes = new double[inputWaveform.length];
+		double[] magnitudes = new double[inp.length];
 		for(int i=0;i<magnitudes.length;i++){//Loads the magnitudes of the complex numbers into an array
 			magnitudes[i] = working_wave[2*i]*working_wave[2*i] + working_wave[2*i+1]*working_wave[2*i+1];
 		}
@@ -144,7 +143,7 @@ public class FrequencyFinder {
 		
 		int[] promFreqs = 	new int[promInds.length];//Converts these indexes into frequencies
 		for(int i=0; i<promInds.length;i++){
-			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(BINS*2.0));
+			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(N*2.0));
 		
 		}
 		

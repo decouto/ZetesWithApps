@@ -64,6 +64,7 @@ public class MidiGenerator {
 		int start=slide;
 		AudioAnalyser aa = new AudioAnalyser(bpm,ppq,sampleRate,clipRate);
 		Pair<Integer[],Long[]> analysedAudio = new Pair<Integer[],Long[]>();
+<<<<<<< HEAD
 		
 		double readVal = audio_stream.readDouble();
 		while(readVal+1 > .00001){
@@ -81,11 +82,35 @@ public class MidiGenerator {
 					audio[i] = audio[audio.length-slide+i];
 				}else{
 					audio[i] = 0;
+=======
+		boolean first = true;
+		try{
+			while(true){
+				if(first){
+					start = 0;
+					first = false;
+				}
+				for(int i=start;i<audio.length;i++){
+					audio[i] = (double) audio_stream.readShort();
+				}
+				start = slide;
+				analysedAudio = aa.analyseAudio(audio);
+				for(int i=0;i<audio.length;i++){
+					if(i<slide){
+						audio[i] = audio[audio.length-slide+i];
+					}else{
+						audio[i] = 0;
+					}
+>>>>>>> Fixed errors. Maybe.
 				}
 			}
+		}catch(Exception e){
 		}
+
 		midiNums.addAll(Arrays.asList(analysedAudio.left));
 		durations.addAll(Arrays.asList(analysedAudio.right));
+		}
+
 		
 		long onTick = 0;
 		int midiNum = OFF_VAL;
