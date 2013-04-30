@@ -1,142 +1,175 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-   
-    <!-- Project Name -->
-    <TextView
-        android:id="@+id/tv_project_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:text="@string/project_name" />
-   
-    <!-- Project BMP -->
-    <TextView android:id="@+id/tv_project_bpm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_project_name"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="10dp"
-        android:textSize="20sp"
-        android:text="@string/new_project_bpm" />
-    
-    <EditText android:id="@+id/et_project_bpm"
-        android:layout_width="180dip"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_project_name"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginRight="10dip"
-        android:layout_marginLeft="10dip"
-        android:gravity="center"
-        android:inputType="number"
-        android:hint="@string/new_project_bpm" />
-    
-    <!-- Project Description -->
-    <TextView android:id="@+id/tv_project_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_project_bpm"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="10dp"
-        android:textSize="20sp"
-        android:text="@string/new_project_description" />
-    
-    <EditText android:id="@+id/et_project_description"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_project_description"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:singleLine="false"
-        android:lines="3"
-        android:gravity="top"
-        android:hint="@string/new_project_description" />
-    
-    <!-- Playback Controls -->
-	<TextView android:id="@+id/tv_project_audio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_project_description"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginLeft="10dp"
-        android:textSize="20sp"
-        android:text="@string/project_audio" />
-	
-	<Button android:id="@+id/btn_share_audio"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/et_project_description"
-	    android:layout_toLeftOf="@+id/fl_playback_btn"
-	    android:layout_marginTop="10dp"
-	    android:layout_marginRight="10dp"
-	    android:text="@string/project_share" />
-	
-	<FrameLayout android:id="@+id/fl_playback_btn"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/et_project_description"
-	    android:layout_alignParentRight="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginRight="10dp" />
-	
-	<!-- Playback Controls -->
-	<TextView android:id="@+id/tv_project_midi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_share_audio"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginLeft="10dp"
-        android:textSize="20sp"
-        android:text="@string/project_midi" />
-	
-	<Button android:id="@+id/btn_share_midi"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/btn_share_audio"
-	    android:layout_toLeftOf="@+id/btn_play_midi"
-	    android:layout_marginTop="10dp"
-	    android:layout_marginRight="10dp"
-	    android:text="@string/project_share" />
-	
-	<Button android:id="@+id/btn_play_midi"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/btn_share_audio"
-	    android:layout_alignParentRight="true"
-	    android:layout_marginTop="10dp"
-	    android:layout_marginRight="10dp"
-	    android:text="@string/project_play" />
-	
-	<!-- Project Description -->
-    <TextView android:id="@+id/tv_project_media"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_play_midi"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="10dp"
-        android:textSize="20sp"
-        android:text="@string/project_media" />
-    
-    <LinearLayout android:id="@+id/ll_project_media"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/tv_project_media"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dip"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:background="#888888" />
-    
-</RelativeLayout>
+
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	   
+	    <!-- Project Name -->
+	    <EditText android:id="@+id/et_project_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="10dp"
+	        android:enabled="false"
+	        android:textColor="@color/black"
+	        android:textSize="30sp"
+	        android:text="@string/project_name"
+	        android:hint="@string/project_name" />
+	   
+	    <!-- Project BMP -->
+	    <TextView android:id="@+id/tv_project_bpm_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/et_project_name"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="20dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="20sp"
+	        android:text="@string/new_project_bpm" />
+	    
+	    <TextView android:id="@+id/tv_project_bpm"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/et_project_name"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginTop="22dip"
+	        android:layout_marginRight="10dip"
+	        android:textSize="18sp" />
+	   
+	    <!-- Project BMP -->
+	    <TextView android:id="@+id/tv_project_date_created_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/tv_project_bpm_label"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="20dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="20sp"
+	        android:text="@string/project_date_created" />
+	    
+	    <TextView android:id="@+id/tv_project_date_created"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/tv_project_bpm_label"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginTop="22dip"
+	        android:layout_marginRight="10dip"
+	        android:textSize="18sp" />
+	    
+	    <!-- Project Description -->
+	    <TextView android:id="@+id/tv_project_description"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/tv_project_date_created_label"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="20dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="20sp"
+	        android:text="@string/new_project_description" />
+	    
+	    <EditText android:id="@+id/et_project_description"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/tv_project_description"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:singleLine="false"
+	        android:enabled="false"
+	        android:lines="3"
+	        android:gravity="top"
+	        android:hint="@string/new_project_description" />
+	    
+	    <!-- Audio Controls -->
+		<TextView android:id="@+id/tv_project_audio"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/et_project_description"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="20sp"
+	        android:text="@string/project_audio" />
+		
+		<Button android:id="@+id/btn_share_audio"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/et_project_description"
+		    android:layout_toLeftOf="@+id/btn_play_audio"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginRight="10dp"
+		    android:text="@string/project_share" />
+		
+		<Button android:id="@+id/btn_play_audio"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/et_project_description"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginRight="10dp"
+		    android:text="@string/project_play" />
+		
+		<!-- MIDI Controls -->
+		<TextView android:id="@+id/tv_project_midi"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/btn_share_audio"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="20sp"
+	        android:text="@string/project_midi" />
+		
+		<Button android:id="@+id/btn_share_midi"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/btn_share_audio"
+		    android:layout_toLeftOf="@+id/btn_play_midi"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginRight="10dp"
+		    android:text="@string/project_share" />
+		
+		<Button android:id="@+id/btn_play_midi"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/btn_share_audio"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginRight="10dp"
+		    android:text="@string/project_play" />
+		
+		<!-- Project Multimedia -->
+	    <TextView android:id="@+id/tv_project_media"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/btn_play_midi"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="20dip"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="20sp"
+	        android:text="@string/project_media" />
+	    
+	    <LinearLayout android:id="@+id/ll_project_media"
+	        android:layout_width="fill_parent"
+	        android:layout_height="50dp"
+	        android:layout_below="@+id/tv_project_media"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:gravity="center"
+	        android:background="#888888" >
+	        
+	        <Button android:id="@+id/btn_add_media"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/project_add_media" />
+	        
+	    </LinearLayout>
+	    
+	</RelativeLayout>
+</ScrollView>

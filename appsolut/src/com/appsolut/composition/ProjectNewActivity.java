@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,7 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
     private SharedPreferences shared_preferences;
     private long project_id;
     private String project_name;
+    private String project_date_created;
     private int project_bpm;
     
     private boolean recording_exists = false;
@@ -77,7 +79,7 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         
         // project details
         db = new DatabaseHandler(mContext);
-        project_id = db.addComposition("temp", "", "");
+        project_id = db.addComposition("temp", 120, "", "");
         if (project_id < 0) {
             Toast.makeText(getApplicationContext(), "Composition creation failed", Toast.LENGTH_LONG).show();
             finish();
@@ -85,7 +87,8 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
         
         // setting defaults
         shared_preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        project_name = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date());
+        project_date_created = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date());
+        project_name = project_date_created + " - " + project_id;
         project_bpm = Integer.parseInt(shared_preferences.getString("prefDefaultBPM", "120"));
         et_project_name.setText(project_name);
         et_project_bpm.setText(String.valueOf(project_bpm));
@@ -123,12 +126,23 @@ public class ProjectNewActivity extends SherlockActivity implements TaskCallback
                 if (!recording_exists) {
                     Toast.makeText(mContext, "No recording exists!", Toast.LENGTH_LONG).show();
                 } else {
+                    // Sanitize inputs
                     String et_name = et_project_name.getText().toString();
                     String name = et_name.equals("") ? project_name : et_name;
                     String description = et_project_description.getText().toString();
                     String et_bpm = et_project_bpm.getText().toString();
                     int bpm = et_bpm.matches("\\d{2,3}") ? Integer.parseInt(et_bpm) : project_bpm;
-                    db.updateComposition(project_id, name, description, bpm);
+                    
+                    // Update composition details
+                    ContentValues args = new ContentValues();
+                    args.put(DatabaseHandler.KEY_COMPOSITION_NAME, name);
+                    args.put(DatabaseHandler.KEY_COMPOSITION_BPM, bpm);
+                    args.put(DatabaseHandler.KEY_DESCRIPTION, description);
+                    args.put(DatabaseHandler.KEY_DATE_CREATED, project_date_created);
+                    args.put(DatabaseHandler.KEY_TEMP,0); 
+                    db.updateComposition(project_id, args);
+                    
+                    // Convert to MIDI
                     GenerateMidiTask generateMidi = new GenerateMidiTask(mContext, ProjectNewActivity.this, project_id);
                     generateMidi.execute();
                 }

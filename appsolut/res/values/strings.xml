@@ -50,11 +50,13 @@
     
     <!-- Project Overview -->
     <string name="project_name">Project Name</string>
+    <string name="project_date_created">Created on</string>
     <string name="project_audio">Audio</string>
     <string name="project_midi">MIDI</string>
     <string name="project_media">Multimedia</string>
     <string name="project_share">Share</string>
     <string name="project_play">Play</string>
+    <string name="project_add_media">Add Media</string>
     
     <!-- MIDI Test -->
     <string name="save_midi_btn">Save MIDI</string>

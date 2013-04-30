@@ -1,9 +1,15 @@
 package com.appsolut.composition.pitch_detection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.String;
 
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
+import com.leff.midi.event.meta.Tempo;
+import com.leff.midi.event.meta.TimeSignature;
+
+import android.util.Log;  
 
 
 public class WaveToMidi {
@@ -20,21 +26,41 @@ public class WaveToMidi {
 																466.1637615181,
 																493.8833012561};
 	private final static int DEFAULT_CLIP_RATE = 5;
+	private static final String TAG = "HerbleGerble";
+	
+	// MIDI resources
+	private MidiFile midiFile;
+	private MidiTrack tempoTrack;
+	private MidiTrack noteTrack;
+	
+	public WaveToMidi(int bpm) {
+	    // MIDI Instantiation
+	    midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
+	    tempoTrack = new MidiTrack();
+	    noteTrack = new MidiTrack();
+	    
+	    // Tempo track
+	    TimeSignature ts = new TimeSignature();
+	    ts.setTimeSignature(4, 4, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
+	    Tempo t = new Tempo();
+	    t.setBpm(bpm);
+	    tempoTrack.insertEvent(ts);
+	    tempoTrack.insertEvent(t);
+	    midiFile.addTrack(tempoTrack);
+	}
 	
 	public MidiFile audioToMidiFile(double[] audio, long sampleRate) {
 		return audioToMidiFile(audio,sampleRate,DEFAULT_CLIP_RATE);
 	}
 	
 	public MidiFile audioToMidiFile(double[] audio, long sampleRate, int clipRate){
-        MidiFile midiFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
-		MidiTrack track = new MidiTrack();
 		Pair<Integer[],Long[]> midiNums = getMidiNumsWithTicks(audioToMidiNums(audio,sampleRate,clipRate));
 		long onTick = 0;
 		for(int i=0;i<midiNums.left.length;i++){
-			track.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
+			noteTrack.insertNote(0, midiNums.left[i], 127, onTick,midiNums.right[i]);
 			onTick += midiNums.right[i];
 		}
-		midiFile.addTrack(track);
+		midiFile.addTrack(noteTrack);
 		return midiFile;
 		
 	}
@@ -49,10 +75,15 @@ public class WaveToMidi {
 				newMidiNums.add(m);
 				ticksPerMidiNum.add(dur*TICKS_PER_OCCURRENCE);
 				lastNum = m;
+				dur = 1;
 			}else{
 				dur++;
 			}
 		}
+//		for(int m: midiNums){
+//			newMidiNums.add(m);
+//			ticksPerMidiNum.add(TICKS_PER_OCCURRENCE);
+//		}
 		Integer[] outMidiNums= new Integer[0];
 		outMidiNums = newMidiNums.toArray(outMidiNums);
 		Long[] outTicksPer = new Long[0];
@@ -70,6 +101,7 @@ public class WaveToMidi {
 	static Pair<Integer,double[]> freqsToRawIntervals(int[] freqs){
 		int baseFreq = freqs[0];
 		double[] intervals = new double[freqs.length];
+		Log.v(TAG, Arrays.toString(freqs));
 		for(int i=0; i<freqs.length; i++){
 			intervals[i] = 12*Math.log(1.0*freqs[i]/baseFreq)/Math.log(2);//The number of half steps from baseFreq
 		}
