@@ -2,6 +2,7 @@ package com.appsolut.composition;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -12,14 +13,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +48,14 @@ public class ProjectOverviewActivity extends SherlockActivity {
     private static final int CODE_CAPTURE_IMAGE = 0;
     private static final int CODE_PICK_IMAGE = 1;
     
+    private static final int IMAGE_SIZE = 120;
+    
     // layout elements
     private EditText et_project_name;
     private TextView tv_project_bpm;
     private TextView tv_project_date_created;
     private EditText et_project_description;
+    private LinearLayout ll_media_gallery;
     private Button btn_add_media;
     
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,7 @@ public class ProjectOverviewActivity extends SherlockActivity {
         tv_project_bpm = (TextView) findViewById(R.id.tv_project_bpm);
         tv_project_date_created = (TextView) findViewById(R.id.tv_project_date_created);
         et_project_description = (EditText) findViewById(R.id.et_project_description);
+        ll_media_gallery = (LinearLayout) findViewById(R.id.ll_media);
         btn_add_media = (Button) findViewById(R.id.btn_add_media);
         
         // set layout values
@@ -76,6 +87,22 @@ public class ProjectOverviewActivity extends SherlockActivity {
         tv_project_bpm.setText(String.valueOf(projectModel.getBpm()));
         tv_project_date_created.setText(projectModel.getDateCreated());
         et_project_description.setText(projectModel.getDescription());
+        
+        // Load images into view pager
+        ArrayList<Long> image_ids = db.getMediaForProject(project_id);
+        if (image_ids.size() > 0) {
+            for (long image_id : image_ids) {
+                File image = new File(projectModel.getProjectDir(), (int)image_id + ".jpg");
+                Log.d("ImageFile", "Location: " + image.getAbsolutePath());
+                LinearLayout ll_image = createPhotoView(getPreview(image, IMAGE_SIZE));
+                ll_media_gallery.addView(ll_image);
+                    
+            }
+        } else {
+            TextView tv_no_media = new TextView(mContext);
+            tv_no_media.setText("You have no stored media");
+            ll_media_gallery.addView(tv_no_media);
+        }
         
         // set listeners
         btn_add_media.setOnClickListener(new OnClickListener(){
@@ -185,6 +212,36 @@ public class ProjectOverviewActivity extends SherlockActivity {
             // TODO define default behavior
             break;
         }
+    }
+    
+    private Bitmap getPreview(File image, int thumb_size) {
+        Log.d("OpenImage", "image.canRead: " + image.canRead());
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(image.getPath(), bounds);
+        if ((bounds.outWidth == -1) || (bounds.outHeight == -1))
+            return null;
+
+        int originalSize = (bounds.outHeight > bounds.outWidth) ? bounds.outHeight
+                : bounds.outWidth;
+
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = originalSize / thumb_size;
+        return BitmapFactory.decodeFile(image.getPath(), opts);     
+    }
+    
+    private LinearLayout createPhotoView(Bitmap bm) {
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setLayoutParams(new LayoutParams(IMAGE_SIZE + 10, IMAGE_SIZE + 10));
+        layout.setGravity(Gravity.CENTER);
+        
+        ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setLayoutParams(new LayoutParams(IMAGE_SIZE, IMAGE_SIZE));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageBitmap(bm);
+        
+        layout.addView(imageView);
+        return layout;
     }
 
 }

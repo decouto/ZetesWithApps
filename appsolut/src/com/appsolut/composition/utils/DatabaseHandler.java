@@ -9,12 +9,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
  
 public class DatabaseHandler extends SQLiteOpenHelper {
  
     // All Static Variables
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 9;
  
     // Database Name
     private static final String DATABASE_NAME = "appsolut";
@@ -75,7 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ");";
         
         String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ("
-                + KEY_UUID + "INTEGER PRIMARY KEY, "
+                + KEY_UUID + " INTEGER PRIMARY KEY, "
                 + KEY_COMPOSITION_ID + " INTEGER, "
                 + KEY_SERVER_STATUS + " TEXT, "
                 + KEY_DATE_CREATED + " TEXT"
@@ -308,17 +309,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return result;
     }
     
-    public long[] getMediaForProject(long project_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    public ArrayList<Long> getMediaForProject(long project_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
         
-        String query = "SELECT " + KEY_UUID + " FROM " + TABLE_MEDIA + " WHERE " + KEY_COMPOSITION_ID + " = " + project_id + ";";
+        String query = "SELECT * FROM " + TABLE_MEDIA + " WHERE " + KEY_COMPOSITION_ID + " = " + project_id + ";";
         
         Cursor cursor = db.rawQuery(query, null);
-        long[] result = new long[cursor.getCount()];
+        ArrayList<Long> result = new ArrayList<Long>();
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
-            result[i] = cursor.getLong(0);
+            Log.d("DBLong", "cursor[0]: " + cursor.getString(1));
+            result.add(cursor.getLong(0));
         }
         cursor.close();
         db.close();

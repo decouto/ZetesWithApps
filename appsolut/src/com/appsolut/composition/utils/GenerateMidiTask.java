@@ -61,7 +61,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     @Override
     protected MidiFile doInBackground(Void...voids) {
         // Open file resource
-        audio_file = new File(dir, project_id + ".rawwav");
+        audio_file = new File(dir, (int)project_id + ".rawwav");
         
         MidiFile track = null;
         try {
@@ -95,7 +95,7 @@ public class GenerateMidiTask extends AsyncTask<Void, Integer, MidiFile>{
     @Override
     protected void onPostExecute(MidiFile midiFile) {        
         // Create .MIDI files
-        File file = new File(dir, project_id + ".midi");
+        File file = new File(dir, (int)project_id + ".midi");
         try {
             midiFile.writeToFile(file);
         } catch (FileNotFoundException e) {
