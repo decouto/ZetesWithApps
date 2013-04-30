@@ -29,7 +29,6 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
     
     // Buffers
     private short[] buffer;
-    private byte[] fileBuffer;
     
     // Storage IO
     private ProjectModel project_model;
@@ -56,7 +55,6 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
         
         // Buffers
         buffer = new short[bufferSize];
-        fileBuffer = new byte[bufferSize * 2];
     }
     
     @Override
@@ -96,6 +94,8 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
                 }
             }
         }
+        audioRecord.stop();
+        audioRecord.release();
         
         try {
             dos.close();
