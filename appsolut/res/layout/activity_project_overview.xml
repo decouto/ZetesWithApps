@@ -214,6 +214,7 @@
 	        <Button android:id="@+id/btn_add_media"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp"
 	        	android:textColor="@color/black"
         		android:typeface="monospace"
 	            android:text="@string/project_add_media" />

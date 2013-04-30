@@ -32,6 +32,7 @@ public class ProjectListActivity extends SherlockActivity {
         
         mContext = this;
         db = new DatabaseHandler(mContext);
+        db.sanitizeCompositions();
         
         LongSparseArray<String> project_list = db.getCompositionNames();
         
