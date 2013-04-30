@@ -90,7 +90,7 @@ public class WaveToMidi {
 	 * @return A pair of arrays representing midi numbers and their durations in ticks
 	 */
 	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums,int clipRate){
-		long TICKS_PER_OCCURRENCE = bpm*ppq/(6*10*1000*clipRate);
+		long TICKS_PER_OCCURRENCE = bpm*ppq/(60*clipRate);
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
 		int lastNum = midiNums[0];
