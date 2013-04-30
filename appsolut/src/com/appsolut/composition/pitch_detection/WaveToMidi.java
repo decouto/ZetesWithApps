@@ -17,6 +17,7 @@ public class WaveToMidi {
 																277.1826309769,
 																293.6647679174,
 																311.1269837221,
+											
 																329.6275569129,
 																349.2282314330,
 																369.9944227116,
@@ -90,7 +91,8 @@ public class WaveToMidi {
 	 * @return A pair of arrays representing midi numbers and their durations in ticks
 	 */
 	public Pair<Integer[],Long[]> getMidiNumsWithTicks(int[] midiNums,int clipRate){
-		long TICKS_PER_OCCURRENCE = bpm*ppq/(60*clipRate);
+		int calibration_mult = 10;//This is only here because I don't know what the formula for ticks/occurrence should be– DCD
+		long TICKS_PER_OCCURRENCE = calibration_mult*bpm*ppq/(60*clipRate);
 		ArrayList<Integer> newMidiNums = new ArrayList<Integer>();
 		ArrayList<Long> ticksPerMidiNum = new ArrayList<Long>();
 		int lastNum = midiNums[0];
@@ -174,16 +176,22 @@ public class WaveToMidi {
 		smoothMidiNums(midiNums);
 		return midiNums;
 	}
-	
+	/**
+	 * Uses a triangular average to smooth out the midi numbers
+	 * @param inp
+	 * @modifies inp
+	 */
 	private static void smoothMidiNums(int[] inp){
 		int[] smoothedInp = new int[inp.length];
-		for(int i=2; i<inp.length-2; i++){
-			smoothedInp[i] = (3*inp[i] + 2*(inp[i-1]+inp[i+1]) + 1*(inp[i-2]+inp[i+2]))/9;
+		for(int i=3; i<inp.length-3; i++){
+			smoothedInp[i] = (4*inp[i] + 3*(inp[i-1]+inp[i+1]) + 2*(inp[i-2]+inp[i+2]) + 1*(inp[i-3]+inp[i+3]))/16;
 		}
 		smoothedInp[0] = inp[0];
 		smoothedInp[1] = inp[1];
+		smoothedInp[2] = inp[2];
 		smoothedInp[inp.length-1] = inp[inp.length-1];
 		smoothedInp[inp.length-2] = inp[inp.length-2];
+		smoothedInp[inp.length-3] = inp[inp.length-3];
 		inp = smoothedInp;
 	}
 	
