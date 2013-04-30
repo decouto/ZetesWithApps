@@ -6,8 +6,10 @@ import android.widget.BaseAdapter;
 
 public class MultimediaAdapter extends BaseAdapter {
     
+    long project_id;
+    
     public MultimediaAdapter(long project_id) {
-        
+        this.project_id = project_id;
     }
 
     @Override
