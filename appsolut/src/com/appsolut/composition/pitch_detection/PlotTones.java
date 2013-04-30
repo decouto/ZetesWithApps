@@ -19,7 +19,7 @@ public class PlotTones {
 	 * @param clipRate | The number of frequencies to produce per second
 	 * @return
 	 */
-	private static final String TAG = "DCisMasterbating";
+	private static final String TAG_PRE = "Pre-smoothing";
 	
 	static int[] audioToFreqs(double[] audio,long sampleRate,int clipRate){
 		double lenAudioInSecs = audio.length*1.0/sampleRate;
@@ -49,7 +49,7 @@ public class PlotTones {
 			window(windowedAudio,audio,i*slide + windowSize/2);
 			inpFreqs[i] = getProminentFrequencies(windowedAudio,sampleRate,1,null)[0];
 		}
-		Log.v(TAG,Arrays.toString(inpFreqs));
+		Log.v(TAG_PRE,Arrays.toString(inpFreqs));
 		smoothFreqs(inpFreqs);
 		return inpFreqs;
 	}
@@ -62,6 +62,7 @@ public class PlotTones {
 	private static void smoothFreqs(int[] inp){
 		//TODO: Implement me!
 	}
+	
 	/**
 	 * takes inpFreqs and averages (does not just bin) it into an array of size numClips
 	 * 
@@ -106,8 +107,8 @@ public class PlotTones {
 			if(stInd+i<0 || stInd+i >= inp.length){
 				out[i] = 0;
 			}else{
-				out[i] = inp[stInd+i] * .5 * (1 - Math.cos(2*Math.PI*i/(width-1)));//Hann Window
-				//out[i] = inp[stInd+i];//Rectangular window, for debugging
+				//out[i] = inp[stInd+i] * .5 * (1 - Math.cos(2*Math.PI*i/(width-1)));//Hann Window
+				out[i] = inp[stInd+i];//Rectangular window, for debugging
 			}
 		}
 	}
@@ -132,7 +133,7 @@ public class PlotTones {
 		int[] promFreqs = 	new int[promInds.length];
 		for(int i=0; i<promInds.length;i++){
 			promFreqs[i] = (int) (1+promInds[i]*sampleRate/(numberBins*2.0));
-		//Log.v(TAG,Arrays.toString(promFreqs));
+		//Log.v(TAG_PRE,Arrays.toString(promFreqs));
 		}
 		return promFreqs;
 	}// end run method body

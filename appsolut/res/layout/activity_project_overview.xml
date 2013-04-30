@@ -14,7 +14,6 @@
         android:layout_marginTop="10dp"
         android:text="@string/project_name"
         android:textColor="@color/neutral_two"
-        android:textColor="@color/black"
         android:textSize="30sp"
         android:typeface="monospace" />
    
