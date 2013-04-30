@@ -72,7 +72,7 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
         // Storage IO
         project_model = new ProjectModel(mContext, (long) project_id);
         dir = project_model.getProjectDir();
-        file = new File(dir, project_id + ".rawwav");
+        file = new File(dir, (int) project_id + ".rawwav");
         try {
             fos = new FileOutputStream(file, true);
             dos = new DataOutputStream(fos);
