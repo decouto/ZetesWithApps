@@ -29,7 +29,7 @@ public class AudioAnalyser {
 		ff = new FrequencyFinder(sampleRate, clipRate);
 	}
 	
-	public Pair<Integer[],Long[]> analyse(double[] audio){
+	public Pair<Integer[],Long[]> analyseAudio(double[] audio){
 		return getMidiNumsWithTicks(audioToMidiNums(audio));
 	}
 	
