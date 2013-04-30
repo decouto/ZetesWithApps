@@ -276,7 +276,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public void sanitizeCompositions() {
         String nameQuery = "DELETE FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_TEMP + " = 1;";
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(nameQuery, null);
         LongSparseArray<String> result = new LongSparseArray<String>();
         cursor.moveToFirst();
@@ -304,6 +304,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Inserting Row
         long result = db.insert(TABLE_MEDIA, null, values);
         db.close(); // Closing database connection
+        
+        return result;
+    }
+    
+    public long[] getMediaForProject(long project_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        String query = "SELECT " + KEY_UUID + " FROM " + TABLE_MEDIA + " WHERE " + KEY_COMPOSITION_ID + " = " + project_id + ";";
+        
+        Cursor cursor = db.rawQuery(query, null);
+        long[] result = new long[cursor.getCount()];
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            result[i] = cursor.getLong(0);
+        }
+        cursor.close();
+        db.close();
         
         return result;
     }
