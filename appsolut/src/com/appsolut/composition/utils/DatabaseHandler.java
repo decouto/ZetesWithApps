@@ -9,12 +9,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
  
 public class DatabaseHandler extends SQLiteOpenHelper {
  
     // All Static Variables
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 9;
  
     // Database Name
     private static final String DATABASE_NAME = "appsolut";
@@ -75,7 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ");";
         
         String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ("
-                + KEY_UUID + "INTEGER PRIMARY KEY, "
+                + KEY_UUID + " INTEGER PRIMARY KEY, "
                 + KEY_COMPOSITION_ID + " INTEGER, "
                 + KEY_SERVER_STATUS + " TEXT, "
                 + KEY_DATE_CREATED + " TEXT"
@@ -276,7 +277,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public void sanitizeCompositions() {
         String nameQuery = "DELETE FROM " + TABLE_COMPOSITIONS + " WHERE " + KEY_TEMP + " = 1;";
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(nameQuery, null);
         LongSparseArray<String> result = new LongSparseArray<String>();
         cursor.moveToFirst();
@@ -304,6 +305,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Inserting Row
         long result = db.insert(TABLE_MEDIA, null, values);
         db.close(); // Closing database connection
+        
+        return result;
+    }
+    
+    public ArrayList<Long> getMediaForProject(long project_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        
+        String query = "SELECT * FROM " + TABLE_MEDIA + " WHERE " + KEY_COMPOSITION_ID + " = " + project_id + ";";
+        
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Long> result = new ArrayList<Long>();
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            Log.d("DBLong", "cursor[0]: " + cursor.getString(1));
+            result.add(cursor.getLong(0));
+        }
+        cursor.close();
+        db.close();
         
         return result;
     }

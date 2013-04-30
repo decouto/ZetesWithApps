@@ -38,7 +38,8 @@
 	        android:layout_alignParentRight="true"
 	        android:layout_marginTop="22dip"
 	        android:layout_marginRight="10dip"
-	        android:textSize="18sp" />
+	        android:textSize="18sp"
+	        android:text="@string/new_project_bpm" />
 	   
 	    <!-- Project BMP -->
 	    <TextView android:id="@+id/tv_project_date_created_label"
@@ -58,7 +59,8 @@
 	        android:layout_alignParentRight="true"
 	        android:layout_marginTop="22dip"
 	        android:layout_marginRight="10dip"
-	        android:textSize="18sp" />
+	        android:textSize="18sp"
+	        android:text="@string/project_date_created" />
 	    
 	    <!-- Project Description -->
 	    <TextView android:id="@+id/tv_project_description"
@@ -156,8 +158,9 @@
 	        android:text="@string/project_media" />
 	    
 	    <LinearLayout android:id="@+id/ll_project_media"
+	        android:orientation="vertical"
 	        android:layout_width="fill_parent"
-	        android:layout_height="50dp"
+	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/tv_project_media"
 	        android:layout_alignParentLeft="true"
 	        android:layout_marginTop="10dip"
@@ -166,6 +169,19 @@
 	        android:gravity="center"
 	        android:background="#888888" >
 	        
+	        <!-- Gallery -->
+	        <HorizontalScrollView
+			    android:id="@+id/hsv_multimedia" 
+			    android:layout_width="match_parent" 
+			    android:layout_height="wrap_content">
+	            <LinearLayout
+	                android:id="@+id/ll_media"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:orientation="horizontal" />
+	        </HorizontalScrollView>
+	        
+	        <!-- Add Media -->
 	        <Button android:id="@+id/btn_add_media"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
