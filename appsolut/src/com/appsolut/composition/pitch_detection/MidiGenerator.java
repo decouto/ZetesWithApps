@@ -9,6 +9,7 @@ import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
 import java.nio.DoubleBuffer;
 import java.io.DataInputStream;
+import java.io.IOException;
 
 public class MidiGenerator {
 	
@@ -42,7 +43,7 @@ public class MidiGenerator {
 	}
 	
 
-	public MidiFile generateMidi(DataInputStream audio_stream, long sampleRate) {
+	public MidiFile generateMidi(DataInputStream audio_stream, long sampleRate) throws IOException {
 		return generateMidi(audio_stream,sampleRate,DEFAULT_CLIP_RATE);
 	}
 	
@@ -53,16 +54,36 @@ public class MidiGenerator {
 	 * @param sampleRate The sample rate the audio was recorded at
 	 * @param clipRate The number of frequencies found in the audio per second
 	 * @return
+	 * @throws IOException 
 	 */
-	public MidiFile generateMidi(DataInputStream audio_stream, long sampleRate, int clipRate){
+	public MidiFile generateMidi(DataInputStream audio_stream, long sampleRate, int clipRate) throws IOException{
 		ArrayList<Integer> midiNums = new ArrayList<Integer>();
 		ArrayList<Long> durations = new ArrayList<Long>();
-		double[] buffered_audio = new double[44100];
+		double[] audio = new double[16384];
+		int slide = 2048;
+		int start=slide;
 		AudioAnalyser aa = new AudioAnalyser(bpm,ppq,sampleRate,clipRate);
-
+		Pair<Integer[],Long[]> analysedAudio = new Pair<Integer[],Long[]>();
 		
-		Pair<Integer[],Long[]> analysedAudio = aa.analyseAudio(buffered_audio);
-		
+		double readVal = audio_stream.readDouble();
+		while(readVal != -1){
+			if(audio[0] < .00001){
+				start = 0;
+			}
+			for(int i=slide;i<audio.length && readVal != -1;i++){
+				audio[i] = readVal;
+				readVal = audio_stream.readDouble();
+			}
+			start = slide;
+			analysedAudio = aa.analyseAudio(audio);
+			for(int i=0;i<audio.length;i++){
+				if(i<slide){
+					audio[i] = audio[audio.length-slide+i];
+				}else{
+					audio[i] = 0;
+				}
+			}
+		}
 		midiNums.addAll(Arrays.asList(analysedAudio.left));
 		durations.addAll(Arrays.asList(analysedAudio.right));
 		

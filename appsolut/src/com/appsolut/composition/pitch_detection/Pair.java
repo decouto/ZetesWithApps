@@ -8,6 +8,10 @@ public class Pair<L,R> {
 		left = _left;
 		right = _right;
 	}
+	public Pair(){
+		left = null;
+		right = null;
+	}
 	@Override
 	public boolean equals(Object that){
 		if(that == null || !(that instanceof Pair)){
