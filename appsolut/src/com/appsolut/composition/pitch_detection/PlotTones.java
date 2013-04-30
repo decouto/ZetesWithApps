@@ -123,7 +123,7 @@ public class PlotTones {
 	 * @return an array of frequencies sorted by prominence in descending order
 	 */
 	static int[] getProminentFrequencies(double[] inputWaveform, long sampleRate, int numTones, double[] noiseFreqs){
-		int numberBins = (int) Math.round(Math.pow(2,12));
+		int numberBins = (int) Math.round(Math.pow(2,11));
 		if(numberBins > inputWaveform.length) numberBins = inputWaveform.length;
 		double [] working_wave = getNormalArray(inputWaveform);//normalize the working wave by subtracting its average value from every element
 		DoubleFFT_1D fftBase = new DoubleFFT_1D(numberBins);
