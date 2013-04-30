@@ -11,7 +11,6 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.widget.Toast;
 
 public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
@@ -33,9 +32,9 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
     private byte[] fileBuffer;
     
     // Storage IO
+    private ProjectModel project_model;
     private FileOutputStream fos;
     private DataOutputStream dos;
-    private File sdCard;
     private File dir;
     private File file;
 
@@ -71,17 +70,9 @@ public class RecordWavTask extends AsyncTask<Long, Void, Boolean> {
         double project_id = params[0];
         
         // Storage IO
-        sdCard = Environment.getExternalStorageDirectory();
-        dir = new File(sdCard.getAbsolutePath()
-                + File.separator
-                + "SongScribe"
-                + File.separator
-                + "projects"
-                + File.separator
-                + (int) project_id
-                + File.separator);
-        dir.mkdirs();
-        file = new File(dir, (int) project_id + ".rawwav");
+        project_model = new ProjectModel(mContext, (long) project_id);
+        dir = project_model.getProjectDir();
+        file = new File(dir, project_id + ".rawwav");
         try {
             fos = new FileOutputStream(file, true);
             dos = new DataOutputStream(fos);

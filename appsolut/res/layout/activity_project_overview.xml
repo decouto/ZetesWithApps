@@ -14,6 +14,7 @@
 	        android:layout_centerHorizontal="true"
 	        android:layout_marginTop="10dp"
 	        android:enabled="false"
+    		android:focusable="false"
 	        android:textColor="@color/black"
 	        android:textSize="30sp"
 	        android:text="@string/project_name"
@@ -80,6 +81,7 @@
 	        android:layout_marginLeft="10dp"
 	        android:singleLine="false"
 	        android:enabled="false"
+    		android:focusable="false"
 	        android:lines="3"
 	        android:gravity="top"
 	        android:hint="@string/new_project_description" />

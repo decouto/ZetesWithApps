@@ -47,6 +47,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // private static final String KEY_UUID = "uuid";
     public static final String KEY_COMPOSITION_ID = "composition_id";
     public static final String KEY_SERVER_STATUS = "server_status";
+    public static final String KEY_MEDIA_TYPE = "media_type";
     // private static final String KEY_DATE_CREATED = "date_created";
  
     public DatabaseHandler(Context context) {
@@ -113,7 +114,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
  
     /**
-     * Storing composition details in database
+     * Store composition details in database
      * @param name the composition's name
      * @param description the composition's description
      * @param dateCreated of form "mm/dd/yyyy"
@@ -284,6 +285,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+    }
+    
+    /**
+     * Create new multimedia entry
+     * @param project_id
+     * @param date_created
+     * @return
+     */
+    public long addMedia(long project_id, String date_created) {
+        SQLiteDatabase db = this.getWritableDatabase();
+ 
+        ContentValues values = new ContentValues();
+        values.put(KEY_COMPOSITION_ID, project_id);     // Composition id
+        values.put(KEY_SERVER_STATUS, "false");         // Server status
+        values.put(KEY_DATE_CREATED, date_created);     // Date created
+ 
+        // Inserting Row
+        long result = db.insert(TABLE_MEDIA, null, values);
+        db.close(); // Closing database connection
+        
+        return result;
     }
  
 }
