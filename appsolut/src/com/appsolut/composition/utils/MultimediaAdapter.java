@@ -6,7 +6,7 @@ import android.widget.BaseAdapter;
 
 public class MultimediaAdapter extends BaseAdapter {
     
-    public MultimediaAdapter() {
+    public MultimediaAdapter(long project_id) {
         
     }
 
